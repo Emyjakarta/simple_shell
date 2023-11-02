@@ -1,5 +1,4 @@
 #include "_shell.h"
-extern char **environ;
 /**
  * _exe_command-execute command
  * @_command: command to be executed

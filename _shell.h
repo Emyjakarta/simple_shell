@@ -11,6 +11,7 @@
 #define MAXIMUM_COMMAND_LENGTH 500
 #define MAXIMUM_ARGUMENTS 30
 
+extern char **environ;
 int main(int argc, char **argv);
 char _putcharshell(const char *str);
 void _show_prompt(void);
