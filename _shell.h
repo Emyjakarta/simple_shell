@@ -17,6 +17,8 @@ char _putcharshell(const char *str);
 void _show_prompt(void);
 void _scan_command(char **_command, size_t length);
 int _is_exit(const char *_command);
+int _is_cd(const char *_command);
+char *_get_cd_path(const char *_command);
 int _is_wildcard(const char *_command);
 void _exe_command(const char *_command);
 

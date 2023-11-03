@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <unistd.h>
+
+/**
+ * main - PID
+ *
+ * Return: Always 0.
+ */
+int main(void)
+{
+	pid_t my_pid, ppid; 
+	//pid_t _pid_max;
+
+	my_pid = getpid();
+	ppid = getppid();
+	//_pid_max = getpid_max();
+	printf("my pid is %u\n", my_pid);
+	printf("my parent pid is %u\n", ppid);
+	//printf("%d", _pid_max);
+	return (0);
+}
