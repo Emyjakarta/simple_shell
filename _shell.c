@@ -7,13 +7,12 @@
  */
 int main(int argc, char **argv)
 {	char *_command = NULL, *_path, *_home;
-	size_t _buffer_size = 0;
 	(void) argc;
 	(void)argv;
 
 	while (1)
 	{
-		_scan_command(&_command, _buffer_size);
+		_scan_command(&_command);
 		if (_is_exit(_command))
 		{
 			free(_command);

@@ -15,7 +15,7 @@ extern char **environ;
 int main(int argc, char **argv);
 char _putcharshell(const char *str);
 void _show_prompt(void);
-void _scan_command(char **_command, size_t length);
+void _scan_command(char **_command);
 int _is_exit(const char *_command);
 int _is_cd(const char *_command);
 char *_get_cd_path(const char *_command);

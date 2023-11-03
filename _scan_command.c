@@ -2,11 +2,11 @@
 /**
  * _scan_command-read the command
  * @_command: command
- * @length: size of the command
  */
-void _scan_command(char **_command, size_t length)
+void _scan_command(char **_command)
 {
 	size_t _buffer_size = 0;
+	ssize_t _read_return_value;
 	char *_command1 = NULL;
 
 	if (isatty(STDIN_FILENO))
@@ -14,14 +14,20 @@ void _scan_command(char **_command, size_t length)
 		_show_prompt();
 		fflush(stdout);
 	}
-	length = getline(&_command1, &_buffer_size, stdin);
-	if (length <= 0)
+	_read_return_value = getline(&_command1, &_buffer_size, stdin);
+	if (_read_return_value == -1)
 	{
 		free(_command1);
 		*_command = NULL;
 		return;
 	}
-	if (_command1[length - 1] == '\n')
-		(_command1)[length - 1] = '\0';
+	if (_read_return_value <= 0)
+	{
+		free(_command1);
+		*_command = NULL;
+		return;
+	}
+	if (_command1[_read_return_value - 1] == '\n')
+		_command1[_read_return_value - 1] = '\0';
 	*_command = _command1;
 }
