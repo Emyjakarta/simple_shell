@@ -21,6 +21,8 @@ void _scan_command(char **_command)
 		*_command = NULL;
 		return;
 	}
+	if (_read_return_value > 0 && _command1[_read_return_value - 1] == '\n')
+		_command1[_read_return_value - 1] = '\0';
 	if (_command1[_read_return_value - 1] == '\n')
 		_command1[_read_return_value - 1] = '\0';
 	*_command = _command1;
