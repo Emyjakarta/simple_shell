@@ -39,7 +39,7 @@ void _exe_command(const char *_command)
 	{
 		if (execve(str[0], str, environ) == -1)
 		{
-			perror(str[0]);
+			perror("./shell");
 			free(_copy_command);
 			exit(1);
 		}
