@@ -18,7 +18,6 @@ int main(int argc, char **argv)
 		{
 			free(_command);
 			break;
-			exit(0);
 		}
 		else if (_is_wildcard(_command))
 		{
