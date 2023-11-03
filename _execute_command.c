@@ -6,10 +6,14 @@
  */
 void _exe_command(const char *_command)
 {
-	pid_t _child_pid = fork();
+	pid_t _child_pid;
 	char *str[MAXIMUM_ARGUMENTS + 1] = {NULL}, *_token;
 	char *_copy_command = strdup(_command);
 	int Q = 0, _status;
+
+	if (_command[0] == '\0' || _command[0] == '\n')
+		return;
+	_child_pid = fork();
 
 	if (_command[0] == '"' && _command[strlen(_command) - 1] == '"')
 	{
@@ -35,7 +39,7 @@ void _exe_command(const char *_command)
 	{
 		if (execve(str[0], str, environ) == -1)
 		{
-			perror("./shell");
+			perror(str[0]);
 			free(_copy_command);
 			exit(1);
 		}

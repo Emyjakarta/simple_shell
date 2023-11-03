@@ -13,6 +13,11 @@ int main(int argc, char **argv)
 	while (1)
 	{
 		_scan_command(&_command);
+		if (_command == NULL)
+		{
+			free(_command);
+			break;
+		}
 		if (_is_exit(_command))
 		{
 			free(_command);

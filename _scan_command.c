@@ -15,15 +15,15 @@ void _scan_command(char **_command)
 		fflush(stdout);
 	}
 	_read_return_value = getline(&_command1, &_buffer_size, stdin);
-	if (_read_return_value == -1)
+	if (_read_return_value <= 0)
 	{
 		free(_command1);
 		*_command = NULL;
 		return;
 	}
-	if (_read_return_value > 0 && _command1[_read_return_value - 1] == '\n')
+	if (_read_return_value > 1 && _command1[_read_return_value - 1] == '\n')
 		_command1[_read_return_value - 1] = '\0';
-	if (_command1[_read_return_value - 1] == '\n')
-		_command1[_read_return_value - 1] = '\0';
+	if (_command != NULL)
+		free(*_command);
 	*_command = _command1;
 }
