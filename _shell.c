@@ -55,5 +55,7 @@ int main(int argc, char **argv)
 		else
 			_exe_command(_command);
 	}
+	printf("_path: %s\n", _path);
+	printf("_home: %s\n", _home);
 	return (0);
 }

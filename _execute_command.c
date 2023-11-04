@@ -10,6 +10,7 @@ void _exe_command(const char *_command)
 	char *str[MAXIMUM_ARGUMENTS + 1] = {NULL}, *_token;
 	char *_copy_command = strdup(_command);
 	int Q = 0, _status;
+	char *_full_path, *_token1, *_path = getenv("PATH");
 
 	if (_command[0] == '\0' || _command[0] == '\n')
 		return;
@@ -37,12 +38,33 @@ void _exe_command(const char *_command)
 	}
 	else if (_child_pid == 0)
 	{
-		if (execve(str[0], str, environ) == -1)
+		_token1 = strtok(_path, ":");
+		while (_token1 != NULL)
 		{
-			perror("./shell");
-			free(_copy_command);
-			exit(1);
+			_full_path = malloc(strlen(_token1) + strlen(str[0]) + 2);
+			sprintf(_full_path, "%s/%s", _token1, str[0]);
+			if (access(_full_path, X_OK) == 0)
+			{
+				if (execve(_full_path, str, environ) == -1)
+				{
+					perror(_full_path);
+					free(_full_path);
+					free(_copy_command);
+					exit(1);
+				}
+				else
+				{
+					free(_full_path);
+					free(_copy_command);
+					exit(0);
+				}
+			}
+			free(_full_path);
+			_token1 = strtok(NULL, ":");
 		}
+		fprintf(stderr, "%s: command not found\n", str[0]);
+		free(_copy_command);
+		exit(1);
 	}
 	else
 	{
