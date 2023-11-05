@@ -9,7 +9,7 @@ void _exe_command(const char *_command)
 	pid_t _child_pid;
 	char *str[MAXIMUM_ARGUMENTS + 1] = {NULL}, *_token;
 	char *_copy_command = strdup(_command);
-	int Q = 0, _status;
+	int Q = 0, _status, R = 0;
 	char *_full_path, *_token1, *_path = getenv("PATH");
 	char *_copy_path = strdup(_path);
 
@@ -21,6 +21,7 @@ void _exe_command(const char *_command)
 		_copy_path = NULL;
 		return;
 	}
+	_tokenize_command(_command, str);
 	_child_pid = fork();
 
 	if (_command[0] == '"' && _command[strlen(_command) - 1] == '"')
@@ -55,11 +56,14 @@ void _exe_command(const char *_command)
 	{
 		if (strchr(_command, '/') != NULL)
 		{
-			if (execve(_copy_command, str, environ) == -1)
+			while (str[R] != NULL)
 			{
-				perror(_copy_command);
-				free(_copy_command);
-				_copy_command = NULL;
+				printf("str[%d] = %s\n", R, str[R]);
+				R++;
+			}
+			if (execve(str[0], str, environ) == -1)
+			{
+				perror(str[0]);
 				free(_copy_path);
 				_copy_path = NULL;
 				exit(1);
@@ -72,11 +76,13 @@ void _exe_command(const char *_command)
 			{
 				_full_path = malloc(strlen(_token1) + strlen(str[0]) + 2);
 				sprintf(_full_path, "%s/%s", _token1, str[0]);
+				printf("Full path to execute: %s\n", _full_path);
 				if (access(_full_path, X_OK) == 0)
 				{
 					if (execve(_full_path, str, environ) == -1)
 					{
-						perror(_full_path);
+						perror("execve failed");
+						printf("Error number: %d\n", errno);
 						free(_full_path);
 						_full_path = NULL;
 						free(_copy_command);
