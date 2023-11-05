@@ -16,7 +16,9 @@ void _exe_command(const char *_command)
 	if (_command[0] == '\0' || _command[0] == '\n')
 	{
 		free(_copy_command);
+		_copy_command = NULL;
 		free(_copy_path);
+		_copy_path = NULL;
 		return;
 	}
 	_child_pid = fork();
