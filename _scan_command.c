@@ -18,6 +18,7 @@ void _scan_command(char **_command)
 	if (_read_return_value <= 0)
 	{
 		free(_command1);
+		_command1 = NULL;
 		*_command = NULL;
 		return;
 	}

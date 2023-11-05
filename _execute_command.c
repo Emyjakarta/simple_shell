@@ -10,13 +10,26 @@ void _exe_command(const char *_command)
 	char *str[MAXIMUM_ARGUMENTS + 1] = {NULL}, *_token;
 	char *_copy_command = strdup(_command);
 	int Q = 0, _status;
+	char *_full_path, *_token1, *_path = getenv("PATH");
+	char *_copy_path = strdup(_path);
 
 	if (_command[0] == '\0' || _command[0] == '\n')
+	{
+		free(_copy_command);
+		_copy_command = NULL;
+		free(_copy_path);
+		_copy_path = NULL;
 		return;
+	}
 	_child_pid = fork();
 
 	if (_command[0] == '"' && _command[strlen(_command) - 1] == '"')
 	{
+		if (_copy_command != NULL)
+		{
+			free(_copy_command);
+			_copy_command = NULL;
+		}
 		_copy_command = strndup(_command + 1, strlen(_command) - 2);
 	}
 	_token = strtok(_copy_command, " ");
@@ -33,14 +46,55 @@ void _exe_command(const char *_command)
 	{
 		perror("fork");
 		free(_copy_command);
+		_copy_command = NULL;
+		free(_copy_path);
+		_copy_path = NULL;
 		exit(1);
 	}
 	else if (_child_pid == 0)
 	{
-		if (execve(str[0], str, environ) == -1)
+		if (strchr(_command, '/') != NULL)
 		{
-			perror("./shell");
+			if (execve(_copy_command, str, environ) == -1)
+			{
+				perror(_copy_command);
+				free(_copy_command);
+				_copy_command = NULL;
+				free(_copy_path);
+				_copy_path = NULL;
+				exit(1);
+			}
+		}
+		else
+		{
+			_token1 = strtok(_copy_path, ":");
+			while (_token1 != NULL)
+			{
+				_full_path = malloc(strlen(_token1) + strlen(str[0]) + 2);
+				sprintf(_full_path, "%s/%s", _token1, str[0]);
+				if (access(_full_path, X_OK) == 0)
+				{
+					if (execve(_full_path, str, environ) == -1)
+					{
+						perror(_full_path);
+						free(_full_path);
+						_full_path = NULL;
+						free(_copy_command);
+						_copy_command = NULL;
+						free(_copy_path);
+						_copy_path = NULL;
+						exit(1);
+					}
+				}
+				free(_full_path);
+				_full_path = NULL;
+				_token1 = strtok(NULL, ":");
+			}
+			fprintf(stderr, "%s: command not found\n", str[0]);
 			free(_copy_command);
+			_copy_command = NULL;
+			free(_copy_path);
+			_copy_path = NULL;
 			exit(1);
 		}
 	}
@@ -48,5 +102,11 @@ void _exe_command(const char *_command)
 	{
 		waitpid(_child_pid, &_status, 0);
 		free(_copy_command);
+		_copy_command = NULL;
+		if (_copy_path != NULL)
+		{
+			free(_copy_path);
+			_copy_path = NULL;
+		}
 	}
 }

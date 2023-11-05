@@ -7,6 +7,8 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <stdio.h>
+#include <limits.h>
+#include <errno.h>
 
 #define MAXIMUM_COMMAND_LENGTH 500
 #define MAXIMUM_ARGUMENTS 30
