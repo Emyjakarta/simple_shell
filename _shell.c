@@ -18,6 +18,7 @@ void _execute_normal_command(const char *command)
 }
 /**
  * _handle_cd_command-handle cd command
+ * @_command: command
  * @_path: pointer to the variable that stores the cd path
  * @_home: pointer to the variable that stores the home
  * Return: void
@@ -110,6 +111,6 @@ int main(int argc, char **argv)
 		}
 	}
 	_process_command_loop(&_command, &_path, &_home);
-	cleanup_after_main(&_path, &_home);
+	_cleanup_after_main(&_path, &_home);
 	return (0);
 }
