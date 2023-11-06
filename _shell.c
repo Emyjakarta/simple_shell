@@ -19,21 +19,19 @@ void _execute_normal_command(const char *command)
 /**
  * _handle_cd_command-handle cd command
  * @_command: command
- * @_path: pointer to the variable that stores the cd path
  * @_home: pointer to the variable that stores the home
  * Return: void
  */
-void _handle_cd_command(char **_command,
-		char **_path, char **_home)
+void _handle_cd_command(char **_command, char **_home)
 {
 	char *_path_arg = _get_cd_path(*_command);
 
 	if (_path_arg == NULL)
 	{
-		_home = getenv("HOME");
-		if (_home != NULL)
+		*_home = getenv("HOME");
+		if (*_home != NULL)
 		{
-			if (chdir(_home) != 0)
+			if (chdir(*_home) != 0)
 				perror("chdir");
 
 		}
@@ -77,7 +75,7 @@ void _process_command_loop(char **_command,
 		}
 		else if (_is_cd(*_command))
 		{
-			_handle_cd_command(_command, _path, _home);
+			_handle_cd_command(_command, _home);
 		}
 		else if (_is_wildcard(*_command))
 		{

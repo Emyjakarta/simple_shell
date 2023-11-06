@@ -11,7 +11,15 @@ void _execute_child_process(const char *_command, char **str,
 		char *_copy_command, char *_copy_path)
 {
 	int R;
+	char **command = malloc(sizeof(char *) * 2);
 
+	if (command == NULL)
+	{
+		perror("malloc");
+		exit(1);
+	}
+	command[0] = strdup(_command);
+	command[1] = NULL;
 	if (strchr(_command, '/') != NULL)
 	{
 		while (str[R] != NULL)
@@ -31,10 +39,10 @@ void _execute_child_process(const char *_command, char **str,
 	}
 	else
 	{
-		_execute_with_path(_command, str, _copy_path, _copy_command);
+		_execute_with_path(command, _copy_path, _copy_command);
 	}
-	free(_copy_command);
-	free(_copy_path);
+	free(command[0]);
+	free(command);
 	exit(0);
 }
 /**
