@@ -26,8 +26,21 @@ void _handle_cd_command(char **_command, char **_home)
 {
 	char _current_directory[1024], *_previous_directory = NULL;
 	char *_path_arg = _get_cd_path(*_command);
-	char *_temp = getcwd(NULL, 0);
-
+	char *_temp = getcwd(NULL, 0), *_target_dir = NULL;
+	
+	if (*_command == NULL || strlen(*_command) == 0)
+	{
+		_target_dir = getenv("HOME");
+		if (_target_dir != NULL)
+		{
+			if (chdir(_target_dir) != 0)
+				perror("chdir");
+			free(_target_dir);
+			_target_dir = NULL;
+		}
+		else
+			fprintf(stderr, "Error: HOME is not set\n");
+	}
 	if (_path_arg == NULL)
 	{
 		if (*_home != NULL)
