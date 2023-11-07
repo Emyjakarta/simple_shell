@@ -24,35 +24,46 @@ void _execute_normal_command(const char *command)
  */
 void _handle_cd_command(char **_command, char **_home)
 {
-	char _current_directory[1024], *_previous_directory = NULL;
+	char _current_directory[1024] = {0}, *_previous_directory = NULL;
 	char *_path_arg = _get_cd_path(*_command);
-	char *_temp = getcwd(NULL, 0), *_target_dir = NULL;
+	char *_temp = NULL, *_target_dir = NULL;
 	
+	if (getcwd(_current_directory, sizeof(_current_directory)) == NULL)
+	{
+		perror("getcwd");
+		return;
+	}
 	if (*_command == NULL || strlen(*_command) == 0)
 	{
 		_target_dir = getenv("HOME");
+		printf("%s\n", _target_dir);
 		if (_target_dir != NULL)
 		{
 			if (chdir(_target_dir) != 0)
+			{
 				perror("chdir");
-			free(_target_dir);
-			_target_dir = NULL;
+				return;
+			}
 		}
 		else
 			fprintf(stderr, "Error: HOME is not set\n");
 	}
+
 	if (_path_arg == NULL)
 	{
 		if (*_home != NULL)
 		{
 			if (_current_directory != NULL && 
-					strcmp(_current_directory, *_home) != 0) 
-			if (strcmp(_current_directory, *_home) != 0)
+					*_home != NULL && strcmp(_current_directory, *_home) != 0) 
 			{
 				_previous_directory = strdup(_current_directory);
 				if (chdir(*_home) != 0)
+				{	
 					perror("chdir");
+					return;
+				}
 				strncpy(_current_directory, *_home, sizeof(_current_directory) - 1);
+				_current_directory[sizeof(_current_directory) - 1] = '\0';
 			}
 		}
 		else
@@ -62,12 +73,18 @@ void _handle_cd_command(char **_command, char **_home)
 	{
 		if (_current_directory != NULL)
 		{
+			_temp = strdup(_current_directory);
 			_previous_directory = strdup(_current_directory);
 			if (chdir("..") != 0)
+			{
 				perror("chdir");
-			strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
-			free(_temp);
-			_temp = NULL;
+				return;
+			}
+			if (getcwd(_current_directory, sizeof(_current_directory)) == NULL)
+			{
+				perror("getcwd");
+				return;
+			}
 		}
 	}
 	else if (strcmp(_path_arg, "-") == 0)
@@ -77,6 +94,7 @@ void _handle_cd_command(char **_command, char **_home)
 			_temp = _previous_directory;
 			_previous_directory = _current_directory;
 			strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
+			_current_directory[sizeof(_current_directory) - 1] = '\0';
 			if (chdir(_temp) != 0)
 			{
 				perror("chdir");
@@ -91,16 +109,31 @@ void _handle_cd_command(char **_command, char **_home)
 	{
 		if (_current_directory != NULL)
 		{
+			_temp = strdup(_current_directory);
 			_previous_directory = strdup(_current_directory);
 			if (chdir(_path_arg) != 0)
 			{
 				perror("chdir");
 			}
-			strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
+			if(getcwd(_current_directory, sizeof(_current_directory)) == NULL)
+				perror("getcwd");
 		}
 	}
-	free(_path_arg);
-	_path_arg = NULL;
+	if (_previous_directory != NULL)
+	{
+		free(_previous_directory);
+		_previous_directory = NULL;
+	}
+	if (_temp != NULL)
+	{
+		free(_temp);
+		_temp = NULL;
+	}
+	if (_path_arg != NULL)
+	{
+		free(_path_arg);
+		_path_arg = NULL;
+	}
 	free(*_command);
 	*_command = NULL;
 }
@@ -161,6 +194,7 @@ int main(int argc, char **argv)
 	else
 		perror("getcwd() error");
 	strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
+	_current_directory[sizeof(_current_directory) - 1] = '\0';
 	_home = getenv("HOME");
 	if (argc > 1)
 	{
@@ -169,6 +203,8 @@ int main(int argc, char **argv)
 			printf("Argument %d: %s\n", Q, argv[Q]);
 		}
 	}
+	free(_temp);
+	_temp = NULL;
 	_process_command_loop(&_command, &_path, &_home);
 	_cleanup_after_main(&_path, &_home);
 	return (0);
