@@ -40,13 +40,16 @@ void _process_command(const char *_command)
  * @_command: command to be checked
  * Return: void
  */
-void _check_command(const char *_command)
+char *_check_command(const char *_command)
 {
 	char *_copy_command = strdup(_command);
 
 	if (_copy_command != NULL && _command[0] == '"'
 			&& _command[strlen(_command) - 1] == '"')
 	{
+		free(_copy_command);
+		_copy_command = NULL;
 		_copy_command = strndup(_command + 1, strlen(_command) - 2);
 	}
+	return(_copy_command);
 }

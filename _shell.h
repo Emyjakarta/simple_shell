@@ -48,7 +48,7 @@ char *_get_cd_path(const char *_command);
 int _is_wildcard(const char *_command);
 void _tokenize_command(const char *_command, char **str);
 void _process_command(const char *_command);
-void _check_command(const char *_command);
+char *_check_command(const char *_command);
 void _execute_child_process(const char *_command, char **str,
 		char *_copy_command, char *_copy_path);
 void _wait_for_child_process(pid_t _child_pid,
@@ -56,7 +56,7 @@ void _wait_for_child_process(pid_t _child_pid,
 void _execute_command_logic(const char *_command, char **str,
 		char *_copy_command, char *_copy_path);
 void _execute_command(const char *_command);
-char *_create_full_path(const char *token, const char *command);
+char *_create_full_path(const char *command);
 void _execute_command_with_full_path(const char *_full_path, char **str,
 		char *_copy_command, char *_copy_path);
 void _unknown_command_exit(const char *command,

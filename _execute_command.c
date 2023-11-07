@@ -10,7 +10,7 @@
 void _execute_child_process(const char *_command, char **str,
 		char *_copy_command, char *_copy_path)
 {
-	int R;
+	int R = 0;
 	char **command = malloc(sizeof(char *) * 2);
 
 	if (command == NULL)

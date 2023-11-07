@@ -3,14 +3,19 @@
  * _create_full_path-create full path
  * @token: token
  * @command: command
- * Return: copy of the full path
+ * Return: full path
  */
-char *_create_full_path(const char *token, const char *command)
+char *_create_full_path(const char *command)
 {
-	char _full_path[PATH_MAX];
-
-	snprintf(_full_path, sizeof(_full_path), "%s/%s", token, command);
-	return (strdup(_full_path));
+	char *_full_path = malloc(PATH_MAX);
+	
+	if (_full_path == NULL)
+	{
+		perror("malloc");
+		exit(1);
+	}
+	snprintf(_full_path, PATH_MAX, "%s", command);
+	return (_full_path);
 }
 /**
  * _execute_command_with_full_path-execute command
@@ -61,19 +66,27 @@ void _execute_commands_with_path(char **str,
 		char *_copy_path, char *_copy_command)
 {
 	char _full_path[PATH_MAX], *_token1;
+	char *_temp_path;
 
 	_token1 = strtok(_copy_path, ":");
 	while (_token1 != NULL)
 	{
-		strcpy(_full_path, _create_full_path(_token1, str[0]));
+		_temp_path = _create_full_path(str[0]);
+		strcpy(_full_path, _temp_path);
 		printf("Full path to execute: %s\n", _full_path);
 		if (access(_full_path, X_OK) == 0)
 		{
 			_execute_command_with_full_path(_full_path, str,
 					_copy_command, _copy_path);
+			free(_temp_path);
+			_temp_path = NULL;
+		}
+		else
+		{
+			free(_temp_path);
+		 	_temp_path = NULL;
 		}
 		_token1 = strtok(NULL, ":");
-		memset(_full_path, 0, sizeof(_full_path));
 	}
 	_unknown_command_exit(str[0], _copy_command, _copy_path);
 }

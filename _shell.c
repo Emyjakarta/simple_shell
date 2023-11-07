@@ -27,7 +27,7 @@ void _handle_cd_command(char **_command, char **_home)
 	char _current_directory[1024] = {0}, *_previous_directory = NULL;
 	char *_path_arg = _get_cd_path(*_command);
 	char *_temp = NULL, *_target_dir = NULL;
-	
+
 	if (getcwd(_current_directory, sizeof(_current_directory)) == NULL)
 	{
 		perror("getcwd");
@@ -53,12 +53,12 @@ void _handle_cd_command(char **_command, char **_home)
 	{
 		if (*_home != NULL)
 		{
-			if (_current_directory != NULL && 
-					*_home != NULL && strcmp(_current_directory, *_home) != 0) 
+			if (_current_directory != NULL &&
+					*_home != NULL && strcmp(_current_directory, *_home) != 0)
 			{
 				_previous_directory = strdup(_current_directory);
 				if (chdir(*_home) != 0)
-				{	
+				{
 					perror("chdir");
 					return;
 				}
@@ -105,7 +105,7 @@ void _handle_cd_command(char **_command, char **_home)
 			fprintf(stderr, "There is no previous directory\n");
 		}
 	}
-	else 
+	else
 	{
 		if (_current_directory != NULL)
 		{
@@ -115,7 +115,7 @@ void _handle_cd_command(char **_command, char **_home)
 			{
 				perror("chdir");
 			}
-			if(getcwd(_current_directory, sizeof(_current_directory)) == NULL)
+			if (getcwd(_current_directory, sizeof(_current_directory)) == NULL)
 				perror("getcwd");
 		}
 	}

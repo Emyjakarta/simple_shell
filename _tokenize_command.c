@@ -9,7 +9,7 @@
  */
 void _tokenize_command(const char *_command, char **str)
 {
-	int Q = 0, R;
+	int Q = 0;
 	char *_copy_command = strdup(_command);
 	char *_token = strtok(_copy_command, " ");
 
@@ -22,9 +22,5 @@ void _tokenize_command(const char *_command, char **str)
 			break;
 	}
 	str[Q] = NULL;
-	for (R = 0; Q > R; R++)
-	{
-		free(str[R]);
-		str[R] = NULL;
-	}
+	free(_copy_command);
 }
