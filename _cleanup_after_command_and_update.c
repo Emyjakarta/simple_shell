@@ -49,7 +49,6 @@ void _cleanup_after_main(char **_path, char **_home)
 	}
 	if (*_home != NULL)
 	{
-		free(*_home);
 		*_home = NULL;
 	}
 }

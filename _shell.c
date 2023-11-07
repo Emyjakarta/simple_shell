@@ -24,29 +24,70 @@ void _execute_normal_command(const char *command)
  */
 void _handle_cd_command(char **_command, char **_home)
 {
+	char _current_directory[1024], *_previous_directory = NULL;
 	char *_path_arg = _get_cd_path(*_command);
+	char *_temp = getcwd(NULL, 0);
 
 	if (_path_arg == NULL)
 	{
-		*_home = getenv("HOME");
 		if (*_home != NULL)
 		{
-			if (chdir(*_home) != 0)
-				perror("chdir");
-
+			if (_current_directory != NULL && 
+					strcmp(_current_directory, *_home) != 0) 
+			if (strcmp(_current_directory, *_home) != 0)
+			{
+				_previous_directory = strdup(_current_directory);
+				if (chdir(*_home) != 0)
+					perror("chdir");
+				strncpy(_current_directory, *_home, sizeof(_current_directory) - 1);
+			}
 		}
 		else
 			perror("HOME not set");
 	}
-	else
+	else if (strcmp(_path_arg, "..") == 0)
 	{
-		if (chdir(_path_arg) != 0)
+		if (_current_directory != NULL)
 		{
-			perror("chdir");
+			_previous_directory = strdup(_current_directory);
+			if (chdir("..") != 0)
+				perror("chdir");
+			strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
+			free(_temp);
+			_temp = NULL;
 		}
-		free(_path_arg);
-		_path_arg = NULL;
 	}
+	else if (strcmp(_path_arg, "-") == 0)
+	{
+		if (_previous_directory != NULL)
+		{
+			_temp = _previous_directory;
+			_previous_directory = _current_directory;
+			strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
+			if (chdir(_temp) != 0)
+			{
+				perror("chdir");
+			}
+		}
+		else
+		{
+			fprintf(stderr, "There is no previous directory\n");
+		}
+	}
+	else 
+	{
+		if (_current_directory != NULL)
+		{
+			_previous_directory = strdup(_current_directory);
+			if (chdir(_path_arg) != 0)
+			{
+				perror("chdir");
+			}
+			strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
+		}
+	}
+	free(_path_arg);
+	_path_arg = NULL;
 	free(*_command);
 	*_command = NULL;
 }
@@ -98,8 +139,15 @@ void _process_command_loop(char **_command,
 int main(int argc, char **argv)
 {
 	char *_command = NULL, *_path = NULL, *_home = NULL;
+	char *_temp = getcwd(NULL, 0);
 	int Q;
+	char _current_directory[1024];
 
+	if (strncpy(_current_directory, _temp, sizeof(_current_directory) - 1) != NULL)
+		printf("This is the current working directory: %s\n", _current_directory);
+	else
+		perror("getcwd() error");
+	strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
 	_home = getenv("HOME");
 	if (argc > 1)
 	{

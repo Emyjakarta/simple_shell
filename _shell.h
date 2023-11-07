@@ -12,6 +12,10 @@
 
 #define MAXIMUM_COMMAND_LENGTH 500
 #define MAXIMUM_ARGUMENTS 30
+
+extern char _current_directory[1024];
+extern char *_previous_directory;
+
 /**
  * struct _alias-alias
  * @name: name of the alias
@@ -48,7 +52,7 @@ void _check_command(const char *_command);
 void _execute_child_process(const char *_command, char **str,
 		char *_copy_command, char *_copy_path);
 void _wait_for_child_process(pid_t _child_pid,
-		int *_status, char *_copy_command);
+		int *_status);
 void _execute_command_logic(const char *_command, char **str,
 		char *_copy_command, char *_copy_path);
 void _execute_command(const char *_command);
