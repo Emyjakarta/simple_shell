@@ -40,15 +40,11 @@ void _update_path(char **_path)
  * @_home: home
  * Return: void
  */
-void _cleanup_after_main(char **_path, char **_home)
+void _cleanup_after_main(char **_path)
 {
 	if (*_path != NULL)
 	{
 		free(*_path);
 		*_path = NULL;
-	}
-	if (*_home != NULL)
-	{
-		*_home = NULL;
 	}
 }

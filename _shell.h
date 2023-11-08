@@ -15,7 +15,6 @@
 
 extern char _current_directory[1024];
 extern char *_previous_directory;
-
 /**
  * struct _alias-alias
  * @name: name of the alias
@@ -44,13 +43,13 @@ char *_strstr(char *haystack, char *needle);
 char *_strcpy(char *dest, char *src);
 
 extern char **environ;
-void _handle_cd_command(char **_command, char **_home);
+void _handle_cd_command(char **argv);
 void _cleanup_after_command(char **_command, char **_path);
 void _update_path(char **_path);
 void _process_command_loop(char **_command,
-		char **_path, char **_home);
+		char **_path, char **argv);
 void _execute_normal_command(const char *command);
-void _cleanup_after_main(char **_path, char **_home);
+void _cleanup_after_main(char **_path);
 int main(int argc, char **argv);
 char _putcharshell(const char *str);
 void _show_prompt(void);
