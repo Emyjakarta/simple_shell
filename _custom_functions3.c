@@ -1,53 +1,179 @@
 #include "_shell.h"
 /**
- * _strstr-a function that locates a substring.
- * @haystack: string to searched
- * @needle: substring to be located
- * Return:a pointer to the beginning of the located
- * substring, or NULL if the substring is not found.
+ * _strdup-a function that returns a pointer to a newly
+ * allocated space in memory, which contains a copy of
+ * the string given as a parameter.
+ * @str: string
+ * The _strdup() function returns a pointer to a new string which is
+ * a duplicate of the string str. Memory for the new string is obtained
+ * with malloc, and can be freed with free.
+ * Return:NULL if str = NULL
+ * On success, the _strdup function returns a pointer to the duplicated
+ * string. It returns NULL if insufficient memory was available
+ * FYI: The standard library provides a similar function:
+ * strdup. Run man strdup to learn more.
  */
-char *_strstr(char *haystack, char *needle)
+char *_strdup(const char *str)
 {
-	if (*needle == '\0')
-	{
-		return (haystack);
-	}
-	while (*haystack != '\0')
-	{
-		char *Q = haystack;
-		char *R = needle;
+	char *ptr;
+	int R = 0, S = 0;
 
-		while (*R != '\0' && *Q == *R)
-		{
-			Q++;
-			R++;
-		}
-		if (*R == '\0')
-		{
-			return (haystack);
-		}
-		haystack++;
+	if (str == NULL)
+	{
+		return (NULL);
 	}
-	return (NULL);
+	while (str[R] != '\0')
+	{
+		R++;
+	}
+	ptr = malloc(R * sizeof(*ptr) + 1);
+	if (ptr == NULL)
+	{
+		return (NULL);
+	}
+	while (S < R)
+	{
+		ptr[S] = str[S];
+		S++;
+	}
+	ptr[S] = '\0';
+	return (ptr);
 }
 /**
- * *_strcpy-a function that copies the string
- * pointed to by src, including the terminating
- * null byte (\0), to the buffer pointed to by dest.
- * @dest: first variable of string
- * @src: second variable of string
- * Return:the pointer to dest
+ * argstostr-a function that concatenates all the
+ * arguments of your program
+ * @ac: number of arguments
+ * @av: array of argument strings
+ * Returns NULL if ac == 0 or av == NULL
+ * Returns a pointer to a new string, or NULL if it fails
+ * Each argument should be followed by a \n in the new string
+ * Return:pointer to the new string
  */
-char *_strcpy(char *dest, char *src)
+char *argstostr(int ac, char **av)
 {
-	char *dest1 = dest;
+	int Q = 0, overall_length = 0, length_av = 0, post = 0;
+	char *new_string;
 
-	while (*src != '\0')
+	if (ac == 0 || av == NULL)
+		return (NULL);
+	while (ac > Q)
 	{
-		*dest = *src;
-		dest++;
-		src++;
+		length_av = 0;
+		while (av[Q][length_av] != '\0')
+		{
+			length_av++;
+		}
+		overall_length += length_av + 1;
+		Q++;
 	}
-	*dest = '\0';
-	return (dest1);
+	new_string = malloc(overall_length + 1);
+	if (new_string == NULL)
+	{
+		return (NULL);
+	}
+	Q = 0;
+	post = 0;
+	while (ac > Q)
+	{
+		length_av = 0;
+		while (av[Q][length_av] != '\0')
+		{
+			new_string[post++] = av[Q][length_av];
+			length_av++;
+		}
+		new_string[post++] = '\n';
+		Q++;
+	}
+	return (new_string);
+}
+/**
+ * wordcount-count words
+ * @str: string
+ * Return:cnt
+ */
+int wordcount(char *str)
+{
+	int cnt = 0, word = 0;
+
+	if (str == NULL || *str == '\0')
+		return (0);
+	while (*str != '\0')
+	{
+		if (*str == ' ' || *str == '\t' || *str == '\n')
+		{
+			word = 0;
+		}
+		else if (!word)
+		{
+			cnt++;
+			word = 1;
+		}
+		str++;
+	}
+	return (cnt);
+}
+/**
+ * wordextract-extract words
+ * @start: start position of word in input string
+ * @length: length of word
+ * Return:word
+ */
+char *wordextract(char *start, int length)
+{
+	char *word = (char *)malloc((length + 1) * (sizeof(char)));
+
+	if (word == NULL)
+	{
+		return (NULL);
+	}
+	_strncpy(word, start, length);
+	word[length] = '\0';
+	return (word);
+}
+/**
+ * wordpopulate-populate words
+ * @words: array of pointers to words that will be populated in the function
+ * @str: represents the input string
+ * Return:words
+ */
+char **wordpopulate(char **words, char *str)
+{
+	int i, wrdcnt = 0, wrdlen = 0;
+
+	while (*str != '\0')
+	{
+		if (*str == ' ' || *str == '\t' || *str == '\n')
+		{
+			if (wrdlen > 0)
+			{
+				words[wrdcnt] = wordextract(str - wrdlen, wrdlen);
+				if (words[wrdcnt] == NULL)
+				{
+					for (i = 0; i < wrdcnt; i++)
+						free(words[i]);
+					free(words);
+					return (NULL);
+				}
+				wrdcnt++;
+				wrdlen = 0;
+			}
+		}
+		else
+			wrdlen++;
+		str++;
+	}
+	if (wrdlen > 0)
+	{
+		words[wrdcnt] = wordextract(str - wrdlen, wrdlen);
+		if (words[wrdcnt] == NULL)
+		{
+			for (i = 0; i <= wrdcnt; i++)
+				free(words[i]);
+			free(words);
+			return (NULL);
+		}
+		wrdcnt++;
+	}
+	words[wrdcnt] = NULL;
+	return (words);
 }

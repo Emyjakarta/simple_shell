@@ -37,7 +37,6 @@ void _update_path(char **_path)
 /**
  * _cleanup_after_main-clean up after main
  * @_path: path
- * @_home: home
  * Return: void
  */
 void _cleanup_after_main(char **_path)

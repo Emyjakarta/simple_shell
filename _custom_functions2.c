@@ -45,7 +45,7 @@ char *_strncpy(char *dest, char *src, int n)
  * Your function should work exactly like strcmp
  * Return:Their difference and zero at the end
  */
-int _strcmp(char *s1, char *s2)
+int _strcmp(const char *s1, const char *s2)
 {
 	int Q = 0;
 

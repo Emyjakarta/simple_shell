@@ -13,8 +13,11 @@
 #define MAXIMUM_COMMAND_LENGTH 500
 #define MAXIMUM_ARGUMENTS 30
 
+extern char **environ;
 extern char _current_directory[1024];
 extern char *_previous_directory;
+extern char home[1024];
+extern char **argv;
 /**
  * struct _alias-alias
  * @name: name of the alias
@@ -36,13 +39,21 @@ char *_memcpy(char *dest, char *src, unsigned int n);
 char *_strchr(char *s, char c);
 int _strlen(char *s);
 char *_strncpy(char *dest, char *src, int n);
-int _strcmp(char *s1, char *s2);
+int _strcmp(const char *s1, const char *s2);
 unsigned int _strspn(char *s, char *accept);
 char *_strpbrk(char *s, char *accept);
 char *_strstr(char *haystack, char *needle);
 char *_strcpy(char *dest, char *src);
+char *str_concat(char *s1, char *s2);
+void freewords(char **words);
+char **strtow(char *str);
+char **wordpopulate(char **words, char *str);
+char *wordextract(char *start, int length);
+int wordcount(char *str);
+char *argstostr(int ac, char **av);
+char *_strdup(const char *str);
+int _strncmp(const char *str1, const char *str2, size_t num);
 
-extern char **environ;
 void _handle_cd_command(char **argv);
 void _cleanup_after_command(char **_command, char **_path);
 void _update_path(char **_path);

@@ -18,13 +18,9 @@ void _execute_normal_command(const char *command)
 }
 /**
  * _handle_cd_command-handle cd command
- * @_command: command
- * @_home: pointer to the variable that stores the home
+ * @argv: command line argument
  * Return: void
  */
-extern char home[1024];
-extern char **argv;
-
 void _handle_cd_command(char **argv)
 {
 	char *path, home[1024], *_home = getenv("HOME");
@@ -40,12 +36,12 @@ void _handle_cd_command(char **argv)
 	if (argv[1] == NULL)
 	{
 		retval = chdir(home);
-		if (retval != 0) 
+		if (retval != 0)
 		{
 			perror("chdir");
 		}
 	}
-	else if (strcmp(argv[1], "-") == 0)
+	else if (_strcmp(argv[1], "-") == 0)
 	{
 		path = getenv("OLDPWD");
 		if (path == NULL)
@@ -72,7 +68,7 @@ void _handle_cd_command(char **argv)
  * _process_command_loop-process command in the main shell loop
  * @_command: command to be processed
  * @_path: path
- * @_home: home
+ * @argv: command line argument
  * Return: void
  */
 void _process_command_loop(char **_command,
@@ -120,11 +116,12 @@ int main(int argc, char **argv)
 	int Q;
 	char _current_directory[1024];
 
-	if (strncpy(_current_directory, _temp, sizeof(_current_directory) - 1) != NULL)
+	if (_strncpy(_current_directory, _temp,
+				sizeof(_current_directory) - 1) != NULL)
 		printf("This is the current working directory: %s\n", _current_directory);
 	else
 		perror("getcwd() error");
-	strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
+	_strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
 	_current_directory[sizeof(_current_directory) - 1] = '\0';
 	if (argc > 1)
 	{

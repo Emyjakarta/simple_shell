@@ -1,14 +1,13 @@
 #include "_shell.h"
 /**
  * _create_full_path-create full path
- * @token: token
  * @command: command
  * Return: full path
  */
 char *_create_full_path(const char *command)
 {
 	char *_full_path = malloc(PATH_MAX);
-	
+
 	if (_full_path == NULL)
 	{
 		perror("malloc");
@@ -68,7 +67,7 @@ void _execute_commands_with_path(char **str,
 	char _full_path[PATH_MAX], *_token1;
 	char *_temp_path;
 
-	_token1 = strtok(_copy_path, ":");
+	_token1 = _strtok(_copy_path, ":");
 	while (_token1 != NULL)
 	{
 		_temp_path = _create_full_path(str[0]);
@@ -85,9 +84,9 @@ void _execute_commands_with_path(char **str,
 		else
 		{
 			free(_temp_path);
-		 	_temp_path = NULL;
+			_temp_path = NULL;
 		}
-		_token1 = strtok(NULL, ":");
+		_token1 = _strtok(NULL, ":");
 	}
 	_unknown_command_exit(str[0], _copy_command, _copy_path);
 }

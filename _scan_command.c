@@ -14,7 +14,7 @@ void _scan_command(char **_command)
 		_show_prompt();
 		fflush(stdout);
 	}
-	_read_return_value = getline(&_command1, &_buffer_size, stdin);
+	_read_return_value = _get_line(&_command1, &_buffer_size, stdin);
 	if (_read_return_value <= 0)
 	{
 		free(_command1);
