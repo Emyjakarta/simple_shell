@@ -72,7 +72,7 @@ void _execute_commands_with_path(char **str,
 	while (_token1 != NULL)
 	{
 		_temp_path = _create_full_path(str[0]);
-		strcpy(_full_path, _temp_path);
+		_strcpy(_full_path, _temp_path);
 		printf("Full path to execute: %s\n", _full_path);
 		if (access(_full_path, X_OK) == 0)
 		{

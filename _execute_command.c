@@ -20,7 +20,7 @@ void _execute_child_process(const char *_command, char **str,
 	}
 	command[0] = strdup(_command);
 	command[1] = NULL;
-	if (strchr(_command, '/') != NULL)
+	if (_strchr((char *)_command, '/') != NULL)
 	{
 		while (str[R] != NULL)
 		{
