@@ -58,6 +58,33 @@ void _handle_cd_command(char **argv)
 		{
 			perror("chdir");
 		}
+		else if (_is_cd(_command))
+		{
+			_path = _get_cd_path(_command);
+			if (_path == NULL)
+			{
+				_home = getenv("HOME");
+				if (_home != NULL)
+				{
+					if (chdir(_home) != 0)
+						perror("chdir");
+
+				}
+				else
+					perror("HOME not set");
+			}
+			else
+			{
+				if (chdir(_path) != 0)
+				{
+					perror("chdir");
+				}
+				free(_path);
+				_path = NULL;
+			}
+			free(_command);
+			_command = NULL;
+		}
 	}
 	else
 	{
