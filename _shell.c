@@ -26,7 +26,7 @@ void _handle_cd_command(char **_command, char **_home)
 {
 	char _current_directory[1024] = {0}, *_previous_directory = NULL;
 	char *_path_arg = _get_cd_path(*_command);
-	char *_temp = NULL, *_target_dir = NULL;
+	char *_temp = NULL, *_target_dir = NULL, *_copy_current_dir;
 
 	if (getcwd(_current_directory, sizeof(_current_directory)) == NULL)
 	{
@@ -91,18 +91,24 @@ void _handle_cd_command(char **_command, char **_home)
 	{
 		if (_previous_directory != NULL)
 		{
+			_copy_current_dir = strdup(_current_directory);
 			_temp = _previous_directory;
-			_previous_directory = _current_directory;
-			strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
-			_current_directory[sizeof(_current_directory) - 1] = '\0';
-			if (chdir(_temp) != 0)
+			_previous_directory = _copy_current_dir;
+			if (chdir(_temp) == 0)
+				getcwd(_current_directory, sizeof(_current_directory));
+			else
 			{
 				perror("chdir");
 			}
 		}
+
 		else
 		{
-			fprintf(stderr, "There is no previous directory\n");
+			_temp = strdup(_current_directory);
+			if (chdir(_path_arg) != 0)
+			{
+				perror("chdir");
+			}
 		}
 	}
 	else
@@ -124,6 +130,8 @@ void _handle_cd_command(char **_command, char **_home)
 		free(_previous_directory);
 		_previous_directory = NULL;
 	}
+	_previous_directory = _temp;
+	_temp = NULL;
 	if (_temp != NULL)
 	{
 		free(_temp);

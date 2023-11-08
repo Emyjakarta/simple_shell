@@ -80,6 +80,7 @@ void _execute_commands_with_path(char **str,
 					_copy_command, _copy_path);
 			free(_temp_path);
 			_temp_path = NULL;
+			return;
 		}
 		else
 		{

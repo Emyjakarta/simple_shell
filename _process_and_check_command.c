@@ -42,14 +42,18 @@ void _process_command(const char *_command)
  */
 char *_check_command(const char *_command)
 {
-	char *_copy_command = strdup(_command);
+	size_t _len = strlen(_command) - 2;
+	char *_copy_command = NULL;
 
 	if (_copy_command != NULL && _command[0] == '"'
-			&& _command[strlen(_command) - 1] == '"')
+			&& _command[_len - 1] == '"')
 	{
-		free(_copy_command);
-		_copy_command = NULL;
-		_copy_command = strndup(_command + 1, strlen(_command) - 2);
+		_copy_command = (char *)malloc(_len + 1);
+		if (_copy_command != NULL)
+		{
+			strncpy(_copy_command, _command + 1, _len);
+			_copy_command[_len] = '\0';
+		}
 	}
 	return(_copy_command);
 }

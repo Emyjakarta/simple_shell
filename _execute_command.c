@@ -27,15 +27,15 @@ void _execute_child_process(const char *_command, char **str,
 			printf("str[%d] = %s\n", R, str[R]);
 			R++;
 		}
-		if (execve(str[0], str, environ) == -1)
+		if (execve(_command, str, environ) == -1)
 		{
-			perror(str[0]);
+			perror(_command);
 			exit(1);
 		}
 	}
 	else
 	{
-		_execute_with_path(command, _copy_path, _copy_command);
+		_execute_with_path(str, _copy_path, _copy_command);
 	}
 	free(command[0]);
 	free(command);
