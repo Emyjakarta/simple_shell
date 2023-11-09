@@ -51,7 +51,7 @@ char *_check_command(const char *_command)
 		_copy_command = (char *)malloc(_len + 1);
 		if (_copy_command != NULL)
 		{
-			_strncpy((char *)_copy_command, _command + 1, _len);
+			_strncpy((char *)_copy_command, (char *)_command + 1, _len);
 			_copy_command[_len] = '\0';
 		}
 	}

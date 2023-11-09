@@ -57,6 +57,8 @@ int _strncmp(const char *str1, const char *str2, size_t num);
 char *_strtok(char *str, const char *delim);
 ssize_t _getline(char **ptr_line, size_t *n, FILE *stream);
 void *_realloc(void *ptr, size_t old_size, size_t new_size);
+void *_copy_memory(void *dest, const void *src, size_t size);
+
 void _handle_cd_command(char **argv);
 void _cleanup_after_command(char **_command, char **_path);
 void _update_path(char **_path);
