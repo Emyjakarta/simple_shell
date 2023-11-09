@@ -8,15 +8,6 @@ void _handle_wildcard(void)
 	_putcharshell("Handle wildcard\n");
 }
 /**
- * _execute_normal_command-execute normal command
- * @command: command
- * Return: void
- */
-void _execute_normal_command(const char *command)
-{
-	_exe_command(command);
-}
-/**
  * _handle_cd_command-handle cd command
  * @dir: directory
  * Return: void
@@ -87,7 +78,7 @@ void _process_command_loop(char **_command,
 		}
 		else
 		{
-			_execute_normal_command(*_command);
+			_execute_command(*_command);
 		}
 		_cleanup_after_command(_command, _path);
 		_update_path(_path);
@@ -116,11 +107,15 @@ int main(int argc, char **argv)
 	_temp = NULL;
 	if (argc != 2)
 	{
-		printf("Usage: %s [filename]\n", argv[0]);
-		return (1);
+		_process_command_loop(&_command, &_path, dir);
 	}
-	_exe_command_from_file(argv[1]);
-	_process_command_loop(&_command, &_path, dir);
+	else if (argc == 2)
+		_exe_command_from_file(argv[1]);
+	else
+	{
+		printf("Usage: %s [filename]\n", argv[0]);
+		return (EXIT_FAILURE);
+	}
 	_cleanup_after_main(&_path);
 	return (0);
 }

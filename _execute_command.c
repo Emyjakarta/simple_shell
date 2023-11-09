@@ -10,23 +10,38 @@ void _execute_child_process(const char *_command, char **str)
 	char *_path = _strdup(getenv("PATH"));
 	char *_token = _strtok(_path, ":");
 	char *_full_path = _strdup(_token);
+	char *_temp_full_path;
 
+	if (_command == NULL || str == NULL)
+	{
+		fprintf(stderr, "Error: command or arguments are NULL)");
+		return;
+	}
 	while (_token != NULL)
 	{
-		_full_path = _strcat(_strcat(_full_path, "/"), (char *)_command);
-		if (access(_full_path, X_OK) == 0)
+		_temp_full_path = _strcat(_token, (char *)_command);
+		if (access(_temp_full_path, X_OK) != 0)
 		{
-			if (execve(_full_path, str, environ) == -1)
+			perror("access");
+			free(_temp_full_path);
+			_temp_full_path = NULL;
+			return;
+		}
+		if (access(_temp_full_path, X_OK) == 0)
+		{
+			if (execve(_temp_full_path, str, environ) == -1)
 			{
 				perror("execve");
+				free(_temp_full_path);
+				_temp_full_path = NULL;
 				exit(1);
 			}
 		}
-		free(_full_path);
-		_full_path = NULL;
 		_token = _strtok(NULL, ":");
 	}
 	fprintf(stderr, "Command not found in PATH\n");
+	free(_path), _path = NULL;
+	free(_full_path), _full_path = NULL;
 }
 /**
  * _wait_for_child_process-wait for child process
@@ -102,13 +117,4 @@ void _execute_command(const char *_command)
 		return;
 	}
 	_execute_command_logic(_command, str);
-}
-/**
- * _exe_command-execute command
- * @_command: command to be executed
- * Return:void
- */
-void _exe_command(const char *_command)
-{
-	_execute_command(_command);
 }

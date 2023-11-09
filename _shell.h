@@ -38,7 +38,7 @@ char *_strcat(char *dest, char *src);
 char *_memset(char *s, char b, unsigned int n);
 char *_strncat(char *dest, char *src, int n);
 char *_memcpy(char *dest, char *src, unsigned int n);
-char *_strchr(const char *s, char c);
+char *_strchr(char *s, char c);
 int _strlen(char *s);
 char *_strncpy(char *dest, char *src, int n);
 int _strcmp(const char *s1, const char *s2);
@@ -68,7 +68,6 @@ void _cleanup_after_command(char **_command, char **_path);
 void _update_path(char **_path);
 void _process_command_loop(char **_command,
 		char **_path, char *dir);
-void _execute_normal_command(const char *command);
 void _cleanup_after_main(char **_path);
 int main(int argc, char **argv);
 char _putcharshell(const char *str);
@@ -95,7 +94,6 @@ void _execute_commands_with_path(char **str,
 		char *_copy_path, char *_copy_command);
 void _execute_with_path(char **str,
 		char *_copy_path, char *_copy_command);
-void _exe_command(const char *_command);
 void _exe_command_from_file(const char *_filename);
 char *_replace_var(char *_command);
 int _get_exit_status(void);

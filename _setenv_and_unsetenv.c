@@ -7,9 +7,14 @@
  */
 void _setenv(const char *var, const char *value)
 {
-	if (setenv(var, value, 1) != 0)
+	if (var == NULL || value == NULL)
 	{
-		fprintf(stderr, "Failed to set environment variable\n");
+		fprintf(stderr, "Error: var or value is NULL\n");
+		return;
+	}
+	if (setenv(var, value, 1) == -1)
+	{
+		perror("Error: Failed to set environment variable\n");
 	}
 }
 /**
@@ -19,6 +24,11 @@ void _setenv(const char *var, const char *value)
  */
 void _unsetenv(const char *var)
 {
+	if (var == NULL)
+	{
+		fprintf(stderr, "Error: var is NULL\n");
+		return;
+	}
 	if (unsetenv(var) != 0)
 	{
 		fprintf(stderr, "Failed to unset environment variable\n");

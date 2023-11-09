@@ -46,7 +46,7 @@ char *_strtok(char *str, const char *delim)
 	}
 	else if (_nexttoken == NULL || *_nexttoken == '\0')
 		return (NULL);
-	while (*_nexttoken != '\0' && _strchr(delim, *_nexttoken) != NULL)
+	while (*_nexttoken != '\0' && _strchr((char *)delim, *_nexttoken) != NULL)
 	{
 		_nexttoken++;
 	}
@@ -56,7 +56,7 @@ char *_strtok(char *str, const char *delim)
 		return (NULL);
 	}
 	_token = _nexttoken;
-	while (*_nexttoken != '\0' && _strchr(delim, *_nexttoken) == NULL)
+	while (*_nexttoken != '\0' && _strchr((char *)delim, *_nexttoken) == NULL)
 	{
 		_nexttoken++;
 	}

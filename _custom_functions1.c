@@ -10,19 +10,21 @@
  */
 char *_strcat(char *dest, char *src)
 {
-	int Q;
-	int R;
+	size_t dest_len = _strlen(dest);
+	size_t src_len = _strlen(src);
+	char *_new_str = (char *)malloc(dest_len + src_len + 2);
 
-	for (Q = 0; dest[Q] != '\0'; Q++)
+	if (_new_str == NULL)
 	{
+		return (NULL);
 	}
-	for (R = 0; src[R] != '\0'; R++)
+	_strcpy(_new_str, dest);
+	if (_new_str[dest_len - 1] != '/' && src[0] != '/')
 	{
-		dest[Q] = src[R];
-		Q++;
+		strcat(_new_str, "/");
 	}
-	dest[Q] = '\0';
-	return (dest);
+	strcat(_new_str, src);
+	return (_new_str);
 }
 /**
  * _memset-a function that fills memory with a constant byte.
@@ -94,7 +96,7 @@ char *_memcpy(char *dest, char *src, unsigned int n)
   * @c: character to be located
   * Return:s if found or NULL if not found
   */
-char *_strchr(const char *s, char c)
+char *_strchr(char *s, char c)
 {
 	while (*s != '\0' && *s != c)
 	{
