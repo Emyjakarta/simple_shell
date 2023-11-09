@@ -24,6 +24,7 @@ char *_strcat(char *dest, char *src)
 		strcat(_new_str, "/");
 	}
 	strcat(_new_str, src);
+	printf("%s\n", _new_str);
 	return (_new_str);
 }
 /**
