@@ -30,3 +30,123 @@ int _strncmp(const char *str1, const char *str2, size_t num)
 		return (0);
 	}
 }
+/**
+ * _strtok-tokenize string
+ * @str: string
+ * @delim: delimiter
+ * Return: Next token in the string based on delimiter
+ */
+char *_strtok(char *str, const char *delim)
+{
+	static char *_nexttoken = NULL;
+	char *_token;
+
+	if (str != NULL)
+	{
+		_nexttoken = str;
+	}
+	else if (_nexttoken == NULL)
+		return (NULL);
+	while (*_nexttoken != '\0' && strchr(delim, *_nexttoken) != NULL)
+	{
+		_nexttoken++;
+	}
+	if (*_nexttoken == '\0')
+	{
+		_nexttoken = NULL;
+		return (NULL);
+	}
+	_token = _nexttoken;
+	while (*_nexttoken != '\0' && _strchr(delim, *_nexttoken) == NULL)
+	{
+		_nexttoken++;
+	}
+	if (*_nexttoken != '\0')
+	{
+		*_nexttoken = '\0';
+		(*_nexttoken)++;
+	}
+	else
+		_nexttoken = NULL;
+	return (_token);
+}
+/**
+ * _getline-reads a line from a file stream
+ * @ptr_line: line to be read
+ * @n: size of the buffer
+ * @stream: file stream
+ */
+ssize_t _getline(char **ptr_line, size_t *n, FILE *stream)
+{
+	size_t _buffersize = *n, R;
+	int Q;
+	char *_temp;
+
+	if (*ptr_line == NULL || *n == 0)
+	{
+		*ptr_line = (char *)malloc(INITIAL_BUFFER_SIZE);
+		if (*ptr_line == NULL)
+			return (-1);
+	_buffersize = INITIAL_BUFFER_SIZE;
+	*n = _buffersize;
+	while ((Q = fgetc(stream)) != EOF)
+	{
+		if (R + 1 >= _buffersize)
+		{
+			_buffersize *= 2;
+			_temp = (char *)_realloc(*ptr_line, *n, _buffersize);
+			if (_temp == NULL)
+				return (-1);
+			*ptr_line = _temp;
+			*n = _buffersize;
+		}
+		(*ptr_line)[R++] = (char)Q;
+		if (Q == '\n')
+		{
+			break;
+		}
+	}
+	if (R == 0 || Q == EOF)
+		return (-1);
+	(*ptr_line)[R] = '\0';
+	return (R);
+}
+/**
+ * _realloc-function that reallocates a memory
+ * block using malloc and free
+ * @ptr: is a pointer to the memory previously
+ * allocated with a call to malloc: malloc(old_size)
+ * @old_size: is the size, in bytes, of the allocated space for ptr
+ * @new_size: is the new size, in bytes of the new memory block
+ * The contents will be copied to the newly allocated space,
+ * in the range from the start of ptr up to the minimum
+ * of the old and new sizes
+ * If new_size > old_size, the “added” memory should not be initialized
+ * If new_size == old_size do not do anything and return ptr
+ * If ptr is NULL, then the call is equivalent to malloc(new_size),
+ * for all values of old_size and new_size
+ * If new_size is equal to zero, and ptr is not NULL,
+ * then the call is equivalent to free(ptr). Return NULL
+ * Don’t forget to free ptr when it makes sense
+ * Return:void
+ */
+void *_realloc(void *ptr, size_t old_size, size_t new_size)
+{
+	void *p1;
+	size_t _copy_size;
+	size_t Q;
+
+	p1 = malloc(new_size);
+	if (p1 == NULL)
+	{
+		free(ptr);
+		return(NULL);
+	}
+	if (ptr != NULL)
+	{
+		_copy_size = (old_size < new_size) ? old_size : new_size;
+		_memcpy(p1, ptr, _copy_size);
+		free(ptr);
+	}
+	return (p1);
+}

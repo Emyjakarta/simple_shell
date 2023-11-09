@@ -94,19 +94,15 @@ char *_memcpy(char *dest, char *src, unsigned int n)
   * @c: character to be located
   * Return:s if found or NULL if not found
   */
-char *_strchr(char *s, char c)
+char *_strchr(const char *s, char c)
 {
-	while (*s != '\0')
+	while (*s != '\0' && *s != c)
 	{
-		if (*s == c)
-		{
-			return (s);
-		}
-		else if (*(s + 1) == c)
-		{
-			return (s + 1);
-		}
 		s++;
 	}
-	return (s + 1);
+	if (*s == c)
+	{
+		return ((char *)s);
+	}
+	return (NULL);
 }

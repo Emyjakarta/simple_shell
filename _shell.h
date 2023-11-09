@@ -12,6 +12,7 @@
 
 #define MAXIMUM_COMMAND_LENGTH 500
 #define MAXIMUM_ARGUMENTS 30
+#define INITIAL_BUFFER_SIZE 128
 
 extern char **environ;
 extern char _current_directory[1024];
@@ -36,7 +37,7 @@ char *_strcat(char *dest, char *src);
 char *_memset(char *s, char b, unsigned int n);
 char *_strncat(char *dest, char *src, int n);
 char *_memcpy(char *dest, char *src, unsigned int n);
-char *_strchr(char *s, char c);
+char *_strchr(const char *s, char c);
 int _strlen(char *s);
 char *_strncpy(char *dest, char *src, int n);
 int _strcmp(const char *s1, const char *s2);
@@ -53,7 +54,9 @@ int wordcount(char *str);
 char *argstostr(int ac, char **av);
 char *_strdup(const char *str);
 int _strncmp(const char *str1, const char *str2, size_t num);
-
+char *_strtok(char *str, const char *delim);
+ssize_t _getline(char **ptr_line, size_t *n, FILE *stream);
+void *_realloc(void *ptr, size_t old_size, size_t new_size);
 void _handle_cd_command(char **argv);
 void _cleanup_after_command(char **_command, char **_path);
 void _update_path(char **_path);
