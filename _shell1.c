@@ -18,61 +18,51 @@ void _execute_normal_command(const char *command)
 }
 /**
  * _handle_cd_command-handle cd command
- * @argv: command line argument
+ * @dir: directory
  * Return: void
  */
-void _handle_cd_command(char **argv)
+void _handle_cd_command(char *dir)
 {
-	char *path, home[1024], *_home = getenv("HOME");
-	int retval;
+	char *_new_dir = NULL;
+	char _current_dir[PATH_MAX];
 
-	if (_home != NULL)
-		_strcpy(home, _home);
+	if (dir == NULL || _strcmp(dir, "~") == 0 ||
+			_strcmp(dir, "$HOME") == 0)
+	{
+		_new_dir = getenv("HOME");
+	}
+	else if (_strcmp(dir, "-") == 0)
+	{
+		_new_dir = getenv("OLDPWD");
+	}
 	else
 	{
-		perror("HOME is not set");
+		_new_dir = dir;
+	}
+	if (getcwd(_current_dir, PATH_MAX) == NULL)
+	{
+		perror("getcwd");
 		return;
 	}
-	if (argv[1] == NULL)
+	if (chdir(_new_dir) != 0)
 	{
-		retval = chdir(home);
-		if (retval != 0)
-		{
-			perror("chdir");
-		}
-	}
-	else if (_strcmp(argv[1], "-") == 0)
-	{
-		path = getenv("OLDPWD");
-		if (path == NULL)
-		{
-			perror("OLDPWD not set");
-			return;
-		}
-		retval = chdir(path);
-		if (retval != 0)
-		{
-			perror("chdir");
-		}
+		perror("chdir");
 	}
 	else
 	{
-		retval = chdir(argv[1]);
-		if (retval != 0)
-		{
-			perror("chdir");
-		}
+		setenv("OLDPWD", _current_dir, 1);
+		setenv("PWD", _new_dir, 1);
 	}
 }
 /**
  * _process_command_loop-process command in the main shell loop
  * @_command: command to be processed
  * @_path: path
- * @argv: command line argument
+ * @dir: directory
  * Return: void
  */
 void _process_command_loop(char **_command,
-		char **_path, char **argv)
+		char **_path, char *dir)
 {
 	while (1)
 	{
@@ -89,7 +79,7 @@ void _process_command_loop(char **_command,
 		}
 		else if (_is_cd(*_command))
 		{
-			_handle_cd_command(argv);
+			_handle_cd_command(dir);
 		}
 		else if (_is_wildcard(*_command))
 		{
@@ -112,8 +102,7 @@ void _process_command_loop(char **_command,
 int main(int argc, char **argv)
 {
 	char *_command = NULL, *_path = NULL;
-	char *_temp = getcwd(NULL, 0);
-	int Q;
+	char *_temp = getcwd(NULL, 0), *dir = NULL;
 	char _current_directory[1024];
 
 	if (_strncpy(_current_directory, _temp,
@@ -123,16 +112,15 @@ int main(int argc, char **argv)
 		perror("getcwd() error");
 	_strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
 	_current_directory[sizeof(_current_directory) - 1] = '\0';
-	if (argc > 1)
-	{
-		for (Q = 0; argc > Q; Q++)
-		{
-			printf("Argument %d: %s\n", Q, argv[Q]);
-		}
-	}
 	free(_temp);
 	_temp = NULL;
-	_process_command_loop(&_command, &_path, argv);
+	if (argc != 2)
+	{
+		printf("Usage: %s [filename]\n", argv[0]);
+		return (1);
+	}
+	_exe_command_from_file(argv[1]);
+	_process_command_loop(&_command, &_path, dir);
 	_cleanup_after_main(&_path);
 	return (0);
 }

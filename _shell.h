@@ -13,6 +13,7 @@
 #define MAXIMUM_COMMAND_LENGTH 500
 #define MAXIMUM_ARGUMENTS 30
 #define INITIAL_BUFFER_SIZE 128
+#define MAX_BUFFER_SIZE 1024
 
 extern char **environ;
 extern char _current_directory[1024];
@@ -59,11 +60,14 @@ ssize_t _getline(char **ptr_line, size_t *n, FILE *stream);
 void *_realloc(void *ptr, size_t old_size, size_t new_size);
 void *_copy_memory(void *dest, const void *src, size_t size);
 
-void _handle_cd_command(char **argv);
+void _setenv(const char *var, const char *value);
+void _unsetenv(const char *var);
+
+void _handle_cd_command(char *dir);
 void _cleanup_after_command(char **_command, char **_path);
 void _update_path(char **_path);
 void _process_command_loop(char **_command,
-		char **_path, char **argv);
+		char **_path, char *dir);
 void _execute_normal_command(const char *command);
 void _cleanup_after_main(char **_path);
 int main(int argc, char **argv);
@@ -77,12 +81,10 @@ int _is_wildcard(const char *_command);
 void _tokenize_command(const char *_command, char **str);
 void _process_command(const char *_command);
 char *_check_command(const char *_command);
-void _execute_child_process(const char *_command, char **str,
-		char *_copy_command, char *_copy_path);
+void _execute_child_process(const char *_command, char **str);
 void _wait_for_child_process(pid_t _child_pid,
 		int *_status);
-void _execute_command_logic(const char *_command, char **str,
-		char *_copy_command, char *_copy_path);
+void _execute_command_logic(const char *_command, char **str);
 void _execute_command(const char *_command);
 char *_create_full_path(const char *command);
 void _execute_command_with_full_path(const char *_full_path, char **str,
@@ -94,6 +96,9 @@ void _execute_commands_with_path(char **str,
 void _execute_with_path(char **str,
 		char *_copy_path, char *_copy_command);
 void _exe_command(const char *_command);
+void _exe_command_from_file(const char *_filename);
+char *_replace_var(char *_command);
+int _get_exit_status(void);
 
 char *obtain_path(char *_command, char **envp);
 
