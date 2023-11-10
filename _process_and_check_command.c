@@ -7,16 +7,16 @@
 void _process_command(const char *_command)
 {
 	char *str[MAXIMUM_ARGUMENTS + 1] = {NULL}, *_token;
-	char *_copy_command = _strdup(_command);
+	char *_copy_command = strdup(_command);
 	int Q = 0, R = 0, S;
 	char *_token1;
 
-	_token = _strtok(_copy_command, " ");
+	_token = strtok(_copy_command, " ");
 	while (_token != NULL)
 	{
-		_token1 = _strdup(_token);
+		_token1 = strdup(_token);
 		str[Q] = _token1;
-		_token = _strtok(NULL, " ");
+		_token = strtok(NULL, " ");
 		Q++;
 		if (MAXIMUM_ARGUMENTS <= Q)
 			break;
@@ -42,7 +42,7 @@ void _process_command(const char *_command)
  */
 char *_check_command(const char *_command)
 {
-	size_t _len = _strlen((char *)_command);
+	size_t _len = strlen((char *)_command);
 	char *_result;
 
 	if (_command != NULL && _command[0] == '"'
@@ -51,7 +51,7 @@ char *_check_command(const char *_command)
 		_result = (char *)malloc(_len - 1);
 		if (_result != NULL)
 		{
-			_strncpy((char *)_result, (char *)_command + 1, _len - 2);
+			strncpy((char *)_result, (char *)_command + 1, _len - 2);
 			_result[_len - 2] = '\0';
 		}
 		return (_result);

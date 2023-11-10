@@ -22,16 +22,16 @@ char *_replace_var(char *_command)
 		if (_command[Q] == '$' && _command[Q + 1] == '$')
 		{
 			sprintf(_pid, "%d", getpid());
-			_strcat(_replaced, _pid);
+			strcat(_replaced, _pid);
 			Q++;
-			R += _strlen(_pid);
+			R += strlen(_pid);
 		}
 		else if (_command[Q] == '$' && _command[Q + 1] == '?')
 		{
 			sprintf(_pid, "%d", _get_exit_status());
-			_strcat(_replaced, _pid);
+			strcat(_replaced, _pid);
 			Q++;
-			R += _strlen(_pid);
+			R += strlen(_pid);
 		}
 		else
 		{

@@ -10,13 +10,13 @@
 void _tokenize_command(const char *_command, char **str)
 {
 	int Q = 0;
-	char *_copy_command = _strdup(_command);
-	char *_token = _strtok(_copy_command, " ");
+	char *_copy_command = strdup(_command);
+	char *_token = strtok(_copy_command, " ");
 
 	while (_token != NULL)
 	{
-		str[Q] = _strdup(_token);
-		_token = _strtok(NULL, " ");
+		str[Q] = strdup(_token);
+		_token = strtok(NULL, " ");
 		Q++;
 		if (MAXIMUM_ARGUMENTS <= Q)
 			break;
