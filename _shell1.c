@@ -17,6 +17,7 @@ void _handle_cd_command(char *dir)
 	char *_new_dir = NULL;
 	char _current_dir[PATH_MAX];
 
+	printf("Command input for cd: %s\n", dir);
 	if (dir == NULL || _strcmp(dir, "~") == 0 ||
 			_strcmp(dir, "$HOME") == 0)
 	{
@@ -29,6 +30,7 @@ void _handle_cd_command(char *dir)
 	else
 	{
 		_new_dir = dir;
+		printf("New directory: %s\n", _new_dir);
 	}
 	if (getcwd(_current_dir, PATH_MAX) == NULL)
 	{
@@ -55,8 +57,6 @@ void _handle_cd_command(char *dir)
 void _process_command_loop(char **_command,
 		char **_path, char *dir)
 {
-	char *_command_name;
-
 	while (1)
 	{
 		_scan_command(_command);
@@ -72,8 +72,6 @@ void _process_command_loop(char **_command,
 		}
 		else if (_is_cd(*_command))
 		{
-			_command_name = strtok(*_command, " ");
-			dir = strtok(NULL, " ");
 			_handle_cd_command(dir);
 		}
 		else if (_is_wildcard(*_command))
