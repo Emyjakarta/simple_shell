@@ -10,16 +10,16 @@
  */
 char *_strcat(char *dest, char *src)
 {
-	size_t dest_len = _strlen(dest);
-	size_t src_len = _strlen(src);
-	char *_new_str = (char *)malloc(dest_len + src_len + 2);
+	size_t dest_len = strlen(dest);
+	size_t src_len = strlen(src);
+	char *_new_str = (char *)malloc(dest_len + src_len + 1);
 
 	if (_new_str == NULL)
 	{
 		return (NULL);
 	}
-	_strcpy(_new_str, dest);
-	if (_new_str[dest_len - 1] != '/' && src[0] != '/')
+	strcpy(_new_str, dest);
+	if (dest_len > 0 && _new_str[dest_len - 1] != '/' && src[0] != '/')
 	{
 		strcat(_new_str, "/");
 	}
