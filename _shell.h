@@ -86,8 +86,7 @@ void _wait_for_child_process(pid_t _child_pid,
 void _execute_command_logic(const char *_command, char **str);
 void _execute_command(const char *_command);
 char *_create_full_path(const char *command);
-void _execute_command_with_full_path(const char *_full_path, char **str,
-		char *_copy_command, char *_copy_path);
+void _execute_absolute_path(const char *_copy_command, char *const str[]);
 void _unknown_command_exit(const char *command,
 		char *_copy_command, char *_copy_path);
 void _execute_commands_with_path(char **str,

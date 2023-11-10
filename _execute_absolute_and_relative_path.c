@@ -17,24 +17,32 @@ char *_create_full_path(const char *command)
 	return (_full_path);
 }
 /**
- * _execute_command_with_full_path-execute command
- * @_full_path: full path
+ * _execute_absolute_path-execute absolute path
+ * @_copy_command: copy of command
  * @str: pointer to an array of strings
- * @_copy_command: copy of the command
- * @_copy_path: copy of the path
  * Return: void
  */
-void _execute_command_with_full_path(const char *_full_path, char **str,
-		char *_copy_command, char *_copy_path)
+void _execute_absolute_path(const char *_copy_command, char *const str[])
 {
-	if (execve(_full_path, str, environ) == -1)
+	int Q;
+
+	if (access(_copy_command, X_OK) == 0)
 	{
-		perror("execve failed");
-		printf("Error number: %d\n", errno);
-		free(_copy_command);
-		_copy_command = NULL;
-		free(_copy_path);
-		_copy_path = NULL;
+		printf("Debug: Contents of the str array before execve:\n");
+		for (Q = 0; str[Q] != NULL; ++Q)
+		{
+			printf("[%d]: %s\n", Q, str[Q]);
+		}
+		if (execve(_copy_command, str, environ) == -1)
+		{
+			perror("execve failed");
+			printf("Error number: %d\n", errno);
+			exit(1);
+		}
+	}
+	else
+	{
+		fprintf(stderr, "Error: Unable to execute %s\n", _copy_command);
 		exit(1);
 	}
 }
@@ -75,8 +83,6 @@ void _execute_commands_with_path(char **str,
 		printf("Full path to execute: %s\n", _full_path);
 		if (access(_full_path, X_OK) == 0)
 		{
-			_execute_command_with_full_path(_full_path, str,
-					_copy_command, _copy_path);
 			free(_temp_path);
 			_temp_path = NULL;
 			return;

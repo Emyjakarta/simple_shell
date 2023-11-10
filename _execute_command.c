@@ -85,7 +85,7 @@ void _execute_command_logic(const char *_command, char **str)
 		else
 			fprintf(stderr, "Usage: unsetenv VARIABLE\n");
 	}
-	if (strcmp(_command, "cd") == 0)
+	else if (strcmp(_command, "cd") == 0)
 	{
 		if (str[1])
 			_handle_cd_command(str[1]);
@@ -101,7 +101,6 @@ void _execute_command_logic(const char *_command, char **str)
 			perror("fork"), exit(1);
 		else if (_child_pid == 0)
 		{
-			_tokenize_command(_command, str);
 			_execute_child_process(_command, str);
 		}
 		else
@@ -121,10 +120,13 @@ void _execute_command(const char *_command)
 	{
 		return;
 	}
+	_tokenize_command(_replace_var((char *)_command), str);
 	if (_command[0] == '/')
+	{
+		_execute_absolute_path(_command, str);
+	}
+	else 
 	{
 		_execute_command_logic(_command, str);
 	}
-	else
-		_execute_command_logic(_replace_var((char *)_command), str);
 }
