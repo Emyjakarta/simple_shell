@@ -16,7 +16,7 @@ void _exe_command_from_file(const char *_filename)
 		perror("File opening failed");
 		exit(EXIT_FAILURE);
 	}
-	while ((_read = _getline(&_line, &_len, _file)) != -1)
+	while ((_read = getline(&_line, &_len, _file)) != -1)
 	{
 		if (_line[0] != '#' && _line[_read - 1] == '\n')
 		{
