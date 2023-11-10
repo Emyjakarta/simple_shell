@@ -55,6 +55,8 @@ void _handle_cd_command(char *dir)
 void _process_command_loop(char **_command,
 		char **_path, char *dir)
 {
+	char *_command_name;
+
 	while (1)
 	{
 		_scan_command(_command);
@@ -70,6 +72,8 @@ void _process_command_loop(char **_command,
 		}
 		else if (_is_cd(*_command))
 		{
+			_command_name = strtok(*_command, " ");
+			dir = strtok(NULL, " ");
 			_handle_cd_command(dir);
 		}
 		else if (_is_wildcard(*_command))

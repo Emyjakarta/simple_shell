@@ -90,12 +90,12 @@ void _execute_command_logic(const char *_command, char **str)
 	else
 	{
 		_child_pid = fork();
+		_check_command(_command);
 		_process_command(_command);
 		if (_child_pid == -1)
 			perror("fork"), exit(1);
 		else if (_child_pid == 0)
 		{
-			_check_command(_command);
 			_tokenize_command(_command, str);
 			_execute_child_process(_command, str);
 		}
