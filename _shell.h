@@ -85,18 +85,10 @@ void _wait_for_child_process(pid_t _child_pid,
 		int *_status);
 void _execute_command_logic(const char *_command, char **str);
 void _execute_command(const char *_command);
-char *_create_full_path(const char *command);
 void _execute_absolute_path(const char *_copy_command, char *const str[]);
-void _unknown_command_exit(const char *command,
-		char *_copy_command, char *_copy_path);
-void _execute_commands_with_path(char **str,
-		char *_copy_path, char *_copy_command);
-void _execute_with_path(char **str,
-		char *_copy_path, char *_copy_command);
 void _exe_command_from_file(const char *_filename);
 char *_replace_var(char *_command);
 int _get_exit_status(void);
 
-char *obtain_path(char *_command, char **envp);
 
 #endif /*_SHELL_H */
