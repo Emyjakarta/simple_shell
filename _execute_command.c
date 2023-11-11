@@ -125,7 +125,7 @@ void _execute_command(const char *_command)
 	{
 		_execute_absolute_path(_command, str);
 	}
-	else 
+	else
 	{
 		_execute_command_logic(_command, str);
 	}

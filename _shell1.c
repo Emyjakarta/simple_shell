@@ -9,14 +9,13 @@ void _handle_wildcard(void)
 }
 /**
  * _handle_cd_command-handle cd command
- * @dir: directory
+ * @_command: command
  * Return: void
  */
 void _handle_cd_command(const char *_command)
 {
-	char *_new_dir = _get_cd_path(_command);
-	char _current_dir[PATH_MAX];
-	char *_oldpwd, *_home_dir;
+	char *_new_dir = _get_cd_path(_command), *_home_dir;
+	char _current_dir[PATH_MAX], *_oldpwd;
 
 	printf("Command input for cd: %s\n", _command);
 	if (_new_dir == NULL || _new_dir[0] == '\0')
@@ -44,21 +43,18 @@ void _handle_cd_command(const char *_command)
 		else
 		{
 			fprintf(stderr, "OLDPWD not set\n");
-			free(_new_dir), _new_dir = NULL;
-			return;
+			free(_new_dir), _new_dir = NULL; return;
 		}
 	}
 	if (getcwd(_current_dir, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
-		free(_new_dir), _new_dir = NULL;
-		return;
+		free(_new_dir), _new_dir = NULL; return;
 	}
 	if (chdir(_new_dir) != 0)
 	{
 		perror("chdir");
-		free(_new_dir), _new_dir = NULL;
-		return;
+		free(_new_dir), _new_dir = NULL; return;
 	}
 	else
 	{
