@@ -7,14 +7,22 @@
  */
 void _execute_child_process(const char *_command, char **str)
 {
-	char *_temp_full_path; 
-	char *command_array[] = {(char *)_command, NULL};
+	char *_temp_full_path, *_token; 
+	char *command_array[MAXIMUM_ARGUMENTS + 2];
+	int Q = 0;
 
 	if (_command == NULL || str == NULL)
 	{
 		fprintf(stderr, "Error: command or arguments are NULL)");
 		return;
 	}
+	_token = strtok((char *)_command, " ");
+	while (_token != NULL && MAXIMUM_ARGUMENTS + 1 > Q)
+	{
+		command_array[Q++] = _token;
+		_token = strtok(NULL, " ");
+	}
+	command_array[Q] = NULL;
 	_temp_full_path = build_path((const char **)command_array);
 	printf("Debug: Contents of the _temp_full_path: %s\n", _temp_full_path);
 	if (_temp_full_path == NULL)
@@ -22,7 +30,7 @@ void _execute_child_process(const char *_command, char **str)
 		fprintf(stderr, "Command not found in PATH\n");
 		return;
 	}
-	if (execve(_temp_full_path, str, environ) == -1)
+	if (execve(_temp_full_path, command_array, environ) == -1)
 	{
 		perror("execve");
 		fprintf(stderr, "Failed to execute _command: %s\n", _temp_full_path);
