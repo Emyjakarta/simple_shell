@@ -1,0 +1,15 @@
+#include "_shell.h"
+/**
+ * _handle_alias-handle alias
+ * @_command: alias command
+ * @alias_list: alias list
+ * Return: void
+ */
+void _handle_alias(char **_command, _alias **alias_list)
+{
+	if (_command == NULL || *_command == NULL)
+	{
+		printf("Empty command\n");
+		return;
+	}
+}

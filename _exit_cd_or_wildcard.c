@@ -6,7 +6,8 @@
  */
 int _is_exit(const char *_command)
 {
-	return (strcmp(_command, "exit") == 0 || strcmp(_command, "EOF") == 0);
+	return (strcmp((char *)_command, "exit") == 0 ||
+			strcmp(_command, "EOF") == 0);
 }
 /**
  * _is_cd-check if it is cd command
@@ -24,8 +25,17 @@ int _is_cd(const char *_command)
  */
 char *_get_cd_path(const char *_command)
 {
-	char *_ptr_space = strchr(_command, ' ');
+	char *_ptr_space;
+	int Q;
 
+	for (Q = 0; _command[Q] != '\0' && Q < MAXIMUM_COMMAND_LENGTH - 1; ++Q)
+	{
+		if (MAXIMUM_COMMAND_LENGTH - 1 <= Q)
+		{
+			return (NULL);
+		}
+	}
+	_ptr_space = strchr((char *)_command, ' ');
 	if (_ptr_space == NULL)
 		return (NULL);
 	else
@@ -38,5 +48,5 @@ char *_get_cd_path(const char *_command)
  */
 int _is_wildcard(const char *_command)
 {
-	return (strpbrk(_command, "*?") != NULL);
+	return (strpbrk((char *)_command, "*?") != NULL);
 }
