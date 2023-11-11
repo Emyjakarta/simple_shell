@@ -48,5 +48,5 @@ char *_get_cd_path(const char *_command)
  */
 int _is_wildcard(const char *_command)
 {
-	return (strpbrk((char *)_command, "*?") != NULL);
+	return (strpbrk((char *)_command, "*") != NULL);
 }
