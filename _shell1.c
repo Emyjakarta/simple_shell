@@ -20,7 +20,12 @@ void _handle_cd_command(const char *_command)
 	printf("Command input for cd: %s\n", _command);
 	if (_new_dir == NULL || _new_dir[0] == '\0')
 	{
-		fprintf(stderr, "Error: Unable to parse directory from command\n");
+		_new_dir = getenv("HOME");
+	}
+	if (getcwd(_current_dir, PATH_MAX) == NULL)
+	{
+		perror("getcwd");
+		free(_new_dir);
 		return;
 	}
 	if (strcmp(_new_dir, "~") == 0)
@@ -28,8 +33,7 @@ void _handle_cd_command(const char *_command)
 		_home_dir = getenv("HOME");
 		if (_home_dir != NULL)
 		{
-			strncpy(_new_dir, _home_dir, PATH_MAX - 1);
-			_new_dir[PATH_MAX - 1] = '\0';
+			snprintf(_new_dir, PATH_MAX, "%s", _home_dir);
 		}
 	}
 	else if (strcmp(_new_dir, "-") == 0)
@@ -37,40 +41,32 @@ void _handle_cd_command(const char *_command)
 		_oldpwd = getenv("OLDPWD");
 		if (_oldpwd != NULL)
 		{
-			strncpy(_new_dir, _oldpwd, PATH_MAX - 1);
-			_new_dir[PATH_MAX - 1] = '\0';
+			snprintf(_new_dir, PATH_MAX, "%s", _oldpwd);
 		}
 		else
 		{
 			fprintf(stderr, "OLDPWD not set\n");
-			free(_new_dir), _new_dir = NULL; return;
+			free(_new_dir); return;
 		}
-	}
-	if (getcwd(_current_dir, PATH_MAX) == NULL)
-	{
-		perror("getcwd");
-		free(_new_dir), _new_dir = NULL; return;
 	}
 	if (chdir(_new_dir) != 0)
 	{
 		perror("chdir");
-		free(_new_dir), _new_dir = NULL; return;
+		free(_new_dir); return;
 	}
 	else
 	{
 		setenv("OLDPWD", _current_dir, 1);
 		setenv("PWD", _new_dir, 1);
 	}
-	free(_new_dir), _new_dir = NULL;
+	free(_new_dir);
 }
 /**
  * _process_command_loop-process command in the main shell loop
  * @_command: command to be processed
- * @dir: directory
  * Return: void
  */
-void _process_command_loop(char **_command,
-		char *dir)
+void _process_command_loop(char **_command)
 {
 	while (1)
 	{
@@ -93,7 +89,7 @@ void _process_command_loop(char **_command,
 				free(*_command), *_command = NULL;
 				continue;
 			}
-			_handle_cd_command(dir);
+			_handle_cd_command(*_command);
 		}
 		else if (_is_wildcard(*_command))
 		{
@@ -114,7 +110,7 @@ void _process_command_loop(char **_command,
 int main(int argc, char **argv)
 {
 	char *_command = NULL;
-	char *_temp = getcwd(NULL, 0), *dir = NULL;
+	char *_temp = getcwd(NULL, 0);
 	char _current_directory[1024];
 
 	if (strncpy(_current_directory, _temp,
@@ -128,7 +124,7 @@ int main(int argc, char **argv)
 	_temp = NULL;
 	if (argc != 2)
 	{
-		_process_command_loop(&_command, dir);
+		_process_command_loop(&_command);
 	}
 	else if (argc == 2)
 		_exe_command_from_file(argv[1]);
