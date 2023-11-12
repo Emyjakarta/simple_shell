@@ -39,15 +39,12 @@ void _handle_cd_command(const char *_command)
 	else if (strcmp(_new_dir, "-") == 0)
 	{
 		_oldpwd = getenv("OLDPWD");
-		if (_oldpwd != NULL)
-		{
-			snprintf(_new_dir, PATH_MAX, "%s", _oldpwd);
-		}
-		else
+		if (_oldpwd == NULL)
 		{
 			fprintf(stderr, "OLDPWD not set\n");
-			free(_new_dir); return;
+			return;
 		}
+		_new_dir = _oldpwd;
 	}
 	if (chdir(_new_dir) != 0)
 	{
