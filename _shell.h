@@ -66,8 +66,7 @@ void _unsetenv(const char *var);
 void _handle_cd_command(const char *_command);
 void _cleanup_after_command(char **_command, char **_path);
 void _update_path(char **_path);
-void _process_command_loop(char **_command,
-		char *dir);
+void _process_command_loop(char **_command);
 void _cleanup_after_main(char **_path);
 int main(int argc, char **argv);
 char _putcharshell(const char *str);
