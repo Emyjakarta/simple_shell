@@ -7,7 +7,7 @@
  */
 void _execute_absolute_path(const char *_copy_command, char *const str[])
 {
-	int Q, R;
+	int Q, R = 0;
 	char *_copy_command_copy;
 	char *_token1 = strtok((char *)_copy_command, " ");
 	char *command_array[MAXIMUM_ARGUMENTS + 2];
