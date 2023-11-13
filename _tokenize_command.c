@@ -12,19 +12,17 @@ void _tokenize_command(const char *_command, char **str)
 	int Q = 0, R;
 	char *_copy_command = strdup(_command);
 	char *_token = strtok(_copy_command, ";");
-	char *_separate_command, *_sep_command_token;
+	char *_sep_command_token;
 
 	while (_token != NULL && MAXIMUM_ARGUMENTS > Q)
 	{
-		_separate_command = strdup(_token);
-		_sep_command_token = strtok(_separate_command, " \t\n\r");
+		_sep_command_token = strtok(_token, " \t\n\r");
 		while (_sep_command_token != NULL && MAXIMUM_ARGUMENTS > Q)
 		{
-			str[Q++] = strdup(_sep_command_token);
+			str[Q++] = _sep_command_token;
 			_sep_command_token = strtok(NULL, " \t\n\r");
 		}
 		_token = strtok(NULL, ";");
-		free(_separate_command);
 	}
 	str[Q] = NULL;
 	printf("Debug: Contents of the str array:\n");

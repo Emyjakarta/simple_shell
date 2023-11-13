@@ -84,10 +84,11 @@ void _wait_for_child_process(pid_t _child_pid,
 		int *_status);
 void _execute_command_logic(const char *_command, char **str);
 void _execute_command(const char *_command);
-void _execute_absolute_path(const char *_copy_command, char *const str[]);
+void _execute_absolute_path(const char *_copy_command);
 void _exe_command_from_file(const char *_filename);
 char *_replace_var(char *_command);
 int _get_exit_status(void);
 char *build_path(const char *_command[]);
+void _free_replaced_var(char *_replaced);
 
 #endif /*_SHELL_H */

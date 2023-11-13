@@ -35,7 +35,7 @@ void _execute_child_process(const char *_command, char **str)
 		perror("execve");
 		fprintf(stderr, "Failed to execute _command: %s\n", _temp_full_path);
 	}
-	free(_temp_full_path);
+	_safe_free((void **)&_temp_full_path);
 }
 /**
  * _wait_for_child_process-wait for child process
@@ -104,18 +104,30 @@ void _execute_command_logic(const char *_command, char **str)
 void _execute_command(const char *_command)
 {
 	char *str[MAXIMUM_ARGUMENTS + 1] = {NULL};
+	int status;
+	char *_replaced = _replace_var((char *)_command);
 
 	if (_command[0] == '\0' || _command[0] == '\n')
 	{
 		return;
 	}
-	_tokenize_command(_replace_var((char *)_command), str);
+	_tokenize_command(_replaced, str);
+	if (_is_exit(_command))
+	{
+		status = 0;
+		if (str[1] != NULL)
+			status = atoi(str[1]);
+		printf("Exiting shell with status %d\n", status);
+		_safe_free((void **)_command);
+		_exit(status);
+	}
 	if (_command[0] == '/')
 	{
-		_execute_absolute_path(_command, str);
+		_execute_absolute_path(_command);
 	}
 	else
 	{
 		_execute_command_logic(_command, str);
 	}
+	_free_replaced_var(_replaced);
 }
