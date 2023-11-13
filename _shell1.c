@@ -126,5 +126,5 @@ int main(int argc, char **argv)
 		printf("Usage: %s [filename]\n", argv[0]);
 		return (EXIT_FAILURE);
 	}
-	return (0);
+	return (errno);
 }
