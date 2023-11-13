@@ -7,7 +7,7 @@
  */
 void _execute_child_process(const char *_command, char **str)
 {
-	char *_temp_full_path, *_token; 
+	char *_temp_full_path, *_token;
 	char *command_array[MAXIMUM_ARGUMENTS + 2];
 	int Q = 0;
 

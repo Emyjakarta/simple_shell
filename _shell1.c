@@ -19,9 +19,7 @@ void _handle_cd_command(const char *_command)
 
 	printf("Command input for cd: %s\n", _command);
 	if (_new_dir == NULL || _new_dir[0] == '\0')
-	{
 		_new_dir = getenv("HOME");
-	}
 	if (getcwd(_current_dir, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
