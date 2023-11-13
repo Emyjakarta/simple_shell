@@ -29,7 +29,7 @@ char *build_path(const char *_command[])
 		}
 		dir = strtok(NULL, ":");
 	}
-	free (_copy_path);
+	free(_copy_path);
 	printf("Debug: Contents of the _build_path: %s\n", _build_path);
 	return (_build_path);
 }
