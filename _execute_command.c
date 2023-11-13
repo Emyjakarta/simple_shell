@@ -35,7 +35,7 @@ void _execute_child_process(const char *_command, char **str)
 		perror("execve");
 		fprintf(stderr, "Failed to execute _command: %s\n", _temp_full_path);
 	}
-	free(_temp_full_path);
+	_safe_free((void **)&_temp_full_path);
 }
 /**
  * _wait_for_child_process-wait for child process
