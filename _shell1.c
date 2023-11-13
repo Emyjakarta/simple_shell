@@ -15,7 +15,7 @@ void _handle_wildcard(void)
 void _handle_cd_command(const char *_command)
 {
 	char *_new_dir = _get_cd_path(_command), *_home_dir;
-	char _current_dir[PATH_MAX], *_oldpwd;
+	char _current_dir[PATH_MAX], *_oldpwd = getenv("OLDPWD");
 
 	printf("Command input for cd: %s\n", _command);
 	if (_new_dir == NULL || _new_dir[0] == '\0')
@@ -39,6 +39,7 @@ void _handle_cd_command(const char *_command)
 		if (_oldpwd == NULL)
 		{
 			fprintf(stderr, "OLDPWD not set\n");
+			_safe_free((void **)&_new_dir);
 			return;
 		}
 		_new_dir = _oldpwd;
@@ -46,12 +47,17 @@ void _handle_cd_command(const char *_command)
 	if (chdir(_new_dir) != 0)
 	{
 		perror("chdir");
+		_safe_free((void **)&_new_dir);
 		return;
 	}
 	else
 	{
 		setenv("OLDPWD", _current_dir, 1);
 		setenv("PWD", _new_dir, 1);
+	}
+	if (_new_dir != NULL && _new_dir != getenv("HOME") && _new_dir != _oldpwd)
+	{
+		_safe_free((void **)&_new_dir);
 	}
 }
 /**

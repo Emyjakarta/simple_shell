@@ -23,8 +23,8 @@ void _tokenize_command(const char *_command, char **str)
 			str[Q++] = strdup(_sep_command_token);
 			_sep_command_token = strtok(NULL, " \t\n\r");
 		}
+		_safe_free((void **)&_separate_command);
 		_token = strtok(NULL, ";");
-		free(_separate_command);
 	}
 	str[Q] = NULL;
 	printf("Debug: Contents of the str array:\n");
