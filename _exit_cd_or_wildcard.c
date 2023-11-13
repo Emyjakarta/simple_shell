@@ -6,8 +6,12 @@
  */
 int _is_exit(const char *_command)
 {
-	return (strcmp((char *)_command, "exit") == 0 ||
-			strcmp(_command, "EOF") == 0);
+	if (strncmp((char *)_command, "exit", 4) == 0 ||
+			strcmp(_command, "EOF") == 0)
+	{
+		return (1);
+	}
+	return (0);
 }
 /**
  * _is_cd-check if it is cd command
