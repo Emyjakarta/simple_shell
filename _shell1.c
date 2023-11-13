@@ -25,7 +25,6 @@ void _handle_cd_command(const char *_command)
 	if (getcwd(_current_dir, PATH_MAX) == NULL)
 	{
 		perror("getcwd");
-		free(_new_dir);
 		return;
 	}
 	if (strcmp(_new_dir, "~") == 0)
@@ -49,14 +48,13 @@ void _handle_cd_command(const char *_command)
 	if (chdir(_new_dir) != 0)
 	{
 		perror("chdir");
-		free(_new_dir); return;
+		return;
 	}
 	else
 	{
 		setenv("OLDPWD", _current_dir, 1);
 		setenv("PWD", _new_dir, 1);
 	}
-	free(_new_dir);
 }
 /**
  * _process_command_loop-process command in the main shell loop

@@ -7,7 +7,8 @@
  */
 void _execute_absolute_path(const char *_copy_command, char *const str[])
 {
-	int Q, R = 0;
+	pid_t _child_pid;
+	int Q, R = 0, _status, S;
 	char *_copy_command_copy;
 	char *_token1 = strtok((char *)_copy_command, " ");
 	char *command_array[MAXIMUM_ARGUMENTS + 2];
@@ -19,24 +20,42 @@ void _execute_absolute_path(const char *_copy_command, char *const str[])
 		_token1 = strtok(NULL, " ");
 	}
 	command_array[R] = NULL;
-	if (access(command_array[0], X_OK) == 0)
+	_child_pid = fork();
+	if (_child_pid == -1)
 	{
-		printf("Debug: Contents of the str array before execve:\n");
-		for (Q = 0; command_array[Q] != NULL; ++Q)
+		perror("fork");
+		free(_copy_command_copy);
+		for (S = 0; S <= R; S++)
 		{
-			printf("[%d]: %s\n", Q, str[Q]);
+			free(command_array[S]);
 		}
-		if (execve(command_array[0], command_array, environ) == -1)
+		_exit(EXIT_FAILURE);
+	}
+	else if (_child_pid == 0)
+	{
+		if (access(command_array[0], X_OK) == 0)
 		{
-			perror("execve failed");
-			printf("Error number: %d\n", errno);
-			exit(1);
+			printf("Debug: Contents of the str array before execve:\n");
+			for (Q = 0; command_array[Q] != NULL; ++Q)
+			{
+				printf("[%d]: %s\n", Q, str[Q]);
+			}
+			if (execve(command_array[0], command_array, environ) == -1)
+			{
+				perror("execve failed");
+				printf("Error number: %d\n", errno);
+				free(_copy_command_copy);
+				for (S = 0; S <= R; S++)
+				{
+					free(command_array[S]);
+				}
+				exit(1);
+			}
 		}
 	}
 	else
 	{
-		fprintf(stderr, "Error: Unable to execute %s\n", _copy_command);
-		exit(1);
+		_wait_for_child_process(_child_pid, &_status);
 	}
 	free(_copy_command_copy);
 }
