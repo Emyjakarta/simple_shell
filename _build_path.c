@@ -11,9 +11,21 @@ char *build_path(const char *_command[])
 	char *dir = strtok(_copy_path, ":");
 	char _full_path[PATH_MAX];
 	char *_build_path = NULL;
+	size_t _dir_len, _command_len;
 
 	while (dir != NULL)
 	{
+		_dir_len = _strlen(dir);
+		_command_len = _strlen(_command[0]);
+		if (_dir_len + 1 + _command_len >= PATH_MAX)
+		{
+			write(STDERR_FILENO, ERROR_MSG, _strlen(ERROR_MSG));
+			break;
+		}
+		_strcpy(_full_path, dir);
+		_full_path[_dir_len] = '/';
+		_strcpy(_full_path + _dir_len + 1, _command[0]);
+
 		snprintf(_full_path, sizeof(_full_path), "%s/%s", dir, _command[0]);
 		if (access(_full_path, X_OK) == 0)
 		{
