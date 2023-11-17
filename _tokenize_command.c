@@ -25,7 +25,6 @@ void _tokenize_command(const char *_command, char **str)
 		_token = strtok(NULL, ";");
 	}
 	str[Q] = NULL;
-	printf("Debug: Contents of the str array:\n");
 	for (R = 0; str[R] != NULL; R++)
 	{
 		printf("[%d]: %s\n", R, str[R]);

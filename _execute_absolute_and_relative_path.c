@@ -7,7 +7,7 @@
 void _execute_absolute_path(const char *_copy_command)
 {
 	pid_t _child_pid;
-	int Q = 0, R = 0, _status, S;
+	int R = 0, _status, S;
 	char *_token1 = strtok((char *)_copy_command, " ");
 	char *command_array[MAXIMUM_ARGUMENTS + 2];
 
@@ -28,9 +28,6 @@ void _execute_absolute_path(const char *_copy_command)
 	{
 		if (access(command_array[0], X_OK) == 0)
 		{
-			printf("Debug: Contents of the command array before execve:\n");
-			for (Q = 0; command_array[Q] != NULL; ++Q)
-				printf("[%d]: %s\n", Q, command_array[Q]);
 			if (execve(command_array[0], command_array, environ) == -1)
 			{
 				perror("execve failed"), printf("Error number: %d\n", errno);

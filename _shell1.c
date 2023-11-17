@@ -104,18 +104,7 @@ void _process_command_loop(char **_command)
 int main(int argc, char **argv)
 {
 	char *_command = NULL;
-	char *_temp = getcwd(NULL, 0);
-	char _current_directory[1024];
 
-	if (strncpy(_current_directory, _temp,
-				sizeof(_current_directory) - 1) != NULL)
-		printf("This is the current working directory: %s\n", _current_directory);
-	else
-		perror("getcwd() error");
-	strncpy(_current_directory, _temp, sizeof(_current_directory) - 1);
-	_current_directory[sizeof(_current_directory) - 1] = '\0';
-	free(_temp);
-	_temp = NULL;
 	if (argc != 2)
 	{
 		_process_command_loop(&_command);

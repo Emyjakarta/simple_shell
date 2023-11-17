@@ -24,7 +24,6 @@ void _execute_child_process(const char *_command, char **str)
 	}
 	command_array[Q] = NULL;
 	_temp_full_path = build_path((const char **)command_array);
-	printf("Debug: Contents of the _temp_full_path: %s\n", _temp_full_path);
 	if (_temp_full_path == NULL)
 	{
 		fprintf(stderr, "Command not found in PATH\n");
@@ -33,7 +32,6 @@ void _execute_child_process(const char *_command, char **str)
 	if (execve(_temp_full_path, command_array, environ) == -1)
 	{
 		perror("execve");
-		fprintf(stderr, "Failed to execute _command: %s\n", _temp_full_path);
 	}
 	_safe_free((void **)&_temp_full_path);
 }
