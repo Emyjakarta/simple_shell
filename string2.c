@@ -9,9 +9,9 @@
  */
 char *_strstr(char *haystack, char *needle)
 {
-	int Q, R;
+	int Q = 0, R = 0;
 
-	for (Q = 0; haystack[R] != '\0'; Q++)
+	for (Q = 0; haystack[Q] != '\0'; Q++)
 	{
 		for (R = 0; needle[R] != '\0'; R++)
 		{
