@@ -11,17 +11,10 @@ char *build_path(const char *_command[])
 	char *dir = strtok(_copy_path, ":");
 	char _full_path[PATH_MAX];
 	char *_build_path = NULL;
-	int Q;
 
-	printf("Debug: Contents of the _command array:\n");
-	for (Q = 0; _command[Q] != NULL; ++Q)
-	{
-		printf("[%d]: %s\n", Q, _command[Q]);
-	}
 	while (dir != NULL)
 	{
 		snprintf(_full_path, sizeof(_full_path), "%s/%s", dir, _command[0]);
-		printf("Debug: Trying _path: %s\n", _full_path);
 		if (access(_full_path, X_OK) == 0)
 		{
 			_build_path = strdup(_full_path);
@@ -30,6 +23,5 @@ char *build_path(const char *_command[])
 		dir = strtok(NULL, ":");
 	}
 	free(_copy_path);
-	printf("Debug: Contents of the _build_path: %s\n", _build_path);
 	return (_build_path);
 }
