@@ -1,7 +1,7 @@
 #include "_shell.h"
 /**
  * build_path-build path for ordinary commands like ls
- * _command: command
+ * @_command: command
  * Return: The built path to the executable
  */
 char *build_path(const char *_command[])

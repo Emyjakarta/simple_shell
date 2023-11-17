@@ -41,6 +41,11 @@ char *_replace_var(char *_command)
 	}
 	return (_replaced);
 }
+/**
+ * _free_replaced_var-free replaced var
+ * @_replaced: replaced
+ * Return: void
+ */
 void _free_replaced_var(char *_replaced)
 {
 	free(_replaced);

@@ -29,17 +29,14 @@ void _handle_cd_command(const char *_command)
 	{
 		_home_dir = getenv("HOME");
 		if (_home_dir != NULL)
-		{
 			snprintf(_new_dir, PATH_MAX, "%s", _home_dir);
-		}
 	}
 	else if (strcmp(_new_dir, "-") == 0)
 	{
 		_oldpwd = getenv("OLDPWD");
 		if (_oldpwd == NULL)
 		{
-			fprintf(stderr, "OLDPWD not set\n");
-			_safe_free((void **)&_new_dir);
+			fprintf(stderr, "OLDPWD not set\n"), _safe_free((void **)&_new_dir);
 			return;
 		}
 		_new_dir = _oldpwd;
@@ -56,9 +53,7 @@ void _handle_cd_command(const char *_command)
 		setenv("PWD", _new_dir, 1);
 	}
 	if (_new_dir != NULL && _new_dir != getenv("HOME") && _new_dir != _oldpwd)
-	{
 		_safe_free((void **)&_new_dir);
-	}
 }
 /**
  * _process_command_loop-process command in the main shell loop

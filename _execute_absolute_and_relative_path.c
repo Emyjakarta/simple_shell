@@ -2,7 +2,6 @@
 /**
  * _execute_absolute_path-execute absolute path
  * @_copy_command: copy of command
- * @str: pointer to an array of strings
  * Return: void
  */
 void _execute_absolute_path(const char *_copy_command)
