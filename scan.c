@@ -1,7 +1,7 @@
 #include "_shell.h"
 
 /**
- * process_input - processes user input, splits into tokens and
+ * process_entry - processes user input, splits into tokens and
  * returns an array of strings to the caller
  * @argv: Commandline argument for name of program
  * @mode: interative or not mode

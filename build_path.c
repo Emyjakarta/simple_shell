@@ -5,7 +5,7 @@
  * @argv: Commandline argument passed in for program name
  * @env: Environment variables
  * @tok_arr: For command and argument
- * @cmd_count: Command count variable pointer (unused now)
+ * @count: Command count variable pointer (unused now)
  * Return: Returns -1 if it fails or 0 if it succeeds
  */
 

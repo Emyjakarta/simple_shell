@@ -111,7 +111,7 @@ void cd_handler(char **argv, char **env, char **tok_arr)
 	{
 		error_msg(2, count, argv[0], "can't cd to", tok_arr[0]);
 	}
-	free(_dir); 
+	free(_dir);
 }
 /**
  * _env_handler - Builtin function prints the environment

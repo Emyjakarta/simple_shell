@@ -2,8 +2,8 @@
 
 /**
  * locate_str - finds if a string exists in the path
- * @cmd: Command string to be searched in the path
- * @path: retrieved path variable
+ * @com: Command string to be searched in the path
+ * @_path: retrieved path variable
  * Return: Pointer to string if it it exists or NULL otherwise
  */
 
