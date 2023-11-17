@@ -1,6 +1,7 @@
 #ifndef _SHELL_H
 #define _SHELL_H
 
+#include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -22,100 +23,69 @@ extern char **environ;
 extern char _current_directory[1024];
 extern char *_previous_directory;
 extern char home[1024];
-extern char **argv;
+
 /**
- * struct Globaldata-global data
- * @_is_dynamic: _is_dynamic
- * Description: Global variable
+ * struct _built_in - structure of command and function
+ * @com: command to be compared and function called
+ * @func: function to be called when command matches
  */
-typedef struct Globaldata
+
+typedef struct _built_in
 {
-	int *_is_dynamic;
-} Globaldata;
-/**
- * struct _alias-alias
- * @name: name of the alias
- * @value: value given to the alias
- * @next: pointer to the next node
- *
- * Description: define built in alias
- */
-typedef struct _alias
-{
-	char *name;
-	char *value;
-	struct alias *next;
-} _alias;
+	char *com;
+	void (*func)(char **argv, char **env, char **tok_arr);
+} _built_in;
 
-void _initialize_is_dynamic(Globaldata *data, int size);
-void free_is_dynamic(Globaldata *data);
-int environ_size(void);
-void _add_environ_var(const char *var,
-		const char *value, Globaldata *data, int env_size);
-int _atoi(const char *s);
-char *_itoa(int num, char *str);
-char *_strcat(char *dest, const char *src);
-char *_strcatn(char *dest, const char *src);
-void *_memset(void *s, int c, size_t n);
-char *_strncat(char *dest, const char *src, size_t n);
-char *_memcpy(void *dest, const void *src, size_t n);
-char *_strchr(const char *s, int c);
-int _strlen(const char *s);
-char *_strncpy(char *dest, const char *src, size_t n);
-int _strcmp(const char *s1, const char *s2);
-size_t _strspn(const char *s, const char *accept);
-char *_strpbrk(const char *s, const char *accept);
-char *_strstr(const char *haystack, const char *needle);
-char *_strcpy(char *dest, const char *src);
-char *str_concat(char *s1, char *s2);
-void freewords(char **words);
-char **strtow(char *str);
-char **wordpopulate(char **words, char *str);
-char *wordextract(char *start, int length);
-int wordcount(char *str);
-char *argstostr(int ac, char **av);
-char *_strdup(const char *str);
-int _strncmp(const char *str1, const char *str2, size_t num);
-char *_strtok(char *str, const char *delim);
-char *_strtokm(char *str);
-ssize_t _getline(char **ptr_line, size_t *n, FILE *stream);
-void *_realloc(void *ptr, size_t old_size, size_t new_size);
-void *_calloc(unsigned int nmemb, unsigned int size);
-void *_copy_memory(void *dest, const void *src, size_t size);
-
-void _safe_free(void **ptr);
-void _setenv_exist(const char *var, const char *value, int index,
-		size_t len_var, size_t len_value, int _ov_write, Globaldata *data);
-void _setenv(const char *var, const char *value);
-void _unsetenv(const char *var);
-int environ_size(void);
-
-void _handle_cd_command(const char *_command);
-void _cleanup_after_command(char **_command, char **_path);
-void _update_path(char **_path);
-void _process_command_loop(char **_command);
-void _cleanup_after_main(char **_path);
-int main(int argc, char **argv);
+char **process_entry(char **argv, int *mode);
 char _putcharshell(const char *str);
 void _show_prompt(void);
 void _scan_command(char **_command);
-int _is_exit(const char *_command);
-int _is_cd(const char *_command);
-char *_get_cd_path(const char *_command);
-int _is_wildcard(const char *_command);
-void _tokenize_command(const char *_command, char **str);
-void _process_command(const char *_command);
-char *_check_command(const char *_command);
-void _execute_child_process(const char *_command, char **str);
-void _wait_for_child_process(pid_t _child_pid,
-		int *_status);
-void _execute_command_logic(const char *_command, char **str);
-void _execute_command(const char *_command);
-void _execute_absolute_path(const char *_copy_command);
-void _exe_command_from_file(const char *_filename);
-char *_replace_var(char *_command);
-int _get_exit_status(void);
-char *build_path(const char *_command[]);
+void _free_replaced_var(char *_replaced);
+void _free_commands(char *commands);
+
+int _atoi(char *s);
+int _isdigit(int c);
+
+void _env_handler(char **argv, char **env, char **tok_arr);
+void cd_handler(char **argv, char **env, char **tok_arr);
+void exit_handler(char **argv, char **env, char **tok_arr);
+
+char *_strdup(char *str);
+char *_strcpy(char *dest, char *src);
+int _strcmp(char *s1, char *s2);
+char *_strcat(char *dest, char *src);
+char *_strdup(char *str);
+int _strlen(char *s);
+char *_strstr(char *haystack, char *needle);
+
+
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+void _free_array_tokens(char **arr_tok);
+
+extern int status;
+extern int count_com;
+
+char *obtain_path(char **env);
+char **break_path(char *path_var);
+char *locate_str(char *cmd, char *path);
+char **break_user_entry(char *user_input);
+void signal_handler(int signum);
+int _builtins_handler(char **argv, char **env, char **token_arr);
+int PATH_handler(char **argv, char **env, char **token_array, int *count_com);
+void full_Path_handler(char **token_arr, char **env, char **argv, int mode);
+void error_msg(int _fd, int num, char *s1, char *s2, char *s3);
+
+
+int missing_path_handler(char *in_path, char **token_array,
+		char **env, int *mode, int *cmd_count, char **argv);
+
+
+void interactive_handler(char **argv, char **env, int *cmd_count, int *mode);
+
+char **process_entry(char **argv, int *mode);
+char _putcharshell(const char *str);
+void _show_prompt(void);
+void _scan_command(char **_command);
 void _free_replaced_var(char *_replaced);
 void _free_commands(char *commands);
 

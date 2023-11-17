@@ -15,29 +15,14 @@
  */
 char *_strdup(const char *str)
 {
-	char *ptr;
-	int R = 0, S = 0;
+	size_t _len = _strlen(str);
+	char *copy = (char *)malloc(_len + 1);
 
-	if (str == NULL)
+	if (copy != NULL)
 	{
-		return (NULL);
+		_strcpy(copy, str);
 	}
-	while (str[R] != '\0')
-	{
-		R++;
-	}
-	ptr = malloc(R * sizeof(*ptr) + 1);
-	if (ptr == NULL)
-	{
-		return (NULL);
-	}
-	while (S < R)
-	{
-		ptr[S] = str[S];
-		S++;
-	}
-	ptr[S] = '\0';
-	return (ptr);
+	return (copy);
 }
 /**
  * argstostr-a function that concatenates all the

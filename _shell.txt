@@ -9,9 +9,12 @@
 #include <stdio.h>
 #include <limits.h>
 #include <errno.h>
+#include <stddef.h>
+#include <ctype.h>
 
 #define MAXIMUM_COMMAND_LENGTH 500
-#define MAXIMUM_ARGUMENTS 30
+#define MAXIMUM_ARGUMENTS 50
+#define MAXIMUM_COMMANDS 50
 #define INITIAL_BUFFER_SIZE 128
 #define MAX_BUFFER_SIZE 1024
 
@@ -20,6 +23,15 @@ extern char _current_directory[1024];
 extern char *_previous_directory;
 extern char home[1024];
 extern char **argv;
+/**
+ * struct Globaldata-global data
+ * @_is_dynamic: _is_dynamic
+ * Description: Global variable
+ */
+typedef struct Globaldata
+{
+	int *_is_dynamic;
+} Globaldata;
 /**
  * struct _alias-alias
  * @name: name of the alias
@@ -34,18 +46,27 @@ typedef struct _alias
 	char *value;
 	struct alias *next;
 } _alias;
-char *_strcat(char *dest, char *src);
-char *_memset(char *s, char b, unsigned int n);
-char *_strncat(char *dest, char *src, int n);
-char *_memcpy(char *dest, char *src, unsigned int n);
-char *_strchr(char *s, char c);
-int _strlen(char *s);
-char *_strncpy(char *dest, char *src, int n);
+
+void _initialize_is_dynamic(Globaldata *data, int size);
+void free_is_dynamic(Globaldata *data);
+int environ_size(void);
+void _add_environ_var(const char *var,
+		const char *value, Globaldata *data, int env_size);
+int _atoi(const char *s);
+char *_itoa(int num, char *str);
+char *_strcat(char *dest, const char *src);
+char *_strcatn(char *dest, const char *src);
+void *_memset(void *s, int c, size_t n);
+char *_strncat(char *dest, const char *src, size_t n);
+char *_memcpy(void *dest, const void *src, size_t n);
+char *_strchr(const char *s, int c);
+int _strlen(const char *s);
+char *_strncpy(char *dest, const char *src, size_t n);
 int _strcmp(const char *s1, const char *s2);
-unsigned int _strspn(char *s, char *accept);
-char *_strpbrk(char *s, char *accept);
-char *_strstr(char *haystack, char *needle);
-char *_strcpy(char *dest, char *src);
+size_t _strspn(const char *s, const char *accept);
+char *_strpbrk(const char *s, const char *accept);
+char *_strstr(const char *haystack, const char *needle);
+char *_strcpy(char *dest, const char *src);
 char *str_concat(char *s1, char *s2);
 void freewords(char **words);
 char **strtow(char *str);
@@ -56,12 +77,18 @@ char *argstostr(int ac, char **av);
 char *_strdup(const char *str);
 int _strncmp(const char *str1, const char *str2, size_t num);
 char *_strtok(char *str, const char *delim);
+char *_strtokm(char *str);
 ssize_t _getline(char **ptr_line, size_t *n, FILE *stream);
 void *_realloc(void *ptr, size_t old_size, size_t new_size);
+void *_calloc(unsigned int nmemb, unsigned int size);
 void *_copy_memory(void *dest, const void *src, size_t size);
+
 void _safe_free(void **ptr);
+void _setenv_exist(const char *var, const char *value, int index,
+		size_t len_var, size_t len_value, int _ov_write, Globaldata *data);
 void _setenv(const char *var, const char *value);
 void _unsetenv(const char *var);
+int environ_size(void);
 
 void _handle_cd_command(const char *_command);
 void _cleanup_after_command(char **_command, char **_path);
@@ -90,5 +117,6 @@ char *_replace_var(char *_command);
 int _get_exit_status(void);
 char *build_path(const char *_command[]);
 void _free_replaced_var(char *_replaced);
+void _free_commands(char *commands);
 
 #endif /*_SHELL_H */

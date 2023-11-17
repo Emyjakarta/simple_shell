@@ -8,39 +8,32 @@
  * @src: source string
  * Return:a pointer to the resulting string dest
  */
-char *_strcat(char *dest, char *src)
+char *_strcat(char *dest, const char *src)
 {
-	size_t dest_len = strlen(dest);
-	size_t src_len = strlen(src);
-	char *_new_str = (char *)malloc(dest_len + src_len + 1);
+	size_t dest_len = _strlen(dest);
+	char *_new_str = dest + dest_len;
 
-	if (_new_str == NULL)
+	while (*src != '\0')
 	{
-		return (NULL);
+		*_new_str++ = *src++;
 	}
-	strcpy(_new_str, dest);
-	if (dest_len > 0 && _new_str[dest_len - 1] != '/' && src[0] != '/')
-	{
-		strcat(_new_str, "/");
-	}
-	strcat(_new_str, src);
-	printf("%s\n", _new_str);
-	return (_new_str);
+	*_new_str = '\0';
+	return (dest);
 }
 /**
  * _memset-a function that fills memory with a constant byte.
  * @s: memory area
- * @b: constant byte
+ * @c: constant byte
  * @n: total number of bytes
  * Return:s
  */
-char *_memset(char *s, char b, unsigned int n)
+void *_memset(void *s, int c, size_t n)
 {
-	char *ptr = s;
+	unsigned char *ptr = s;
 
 	while (n-- > 0)
 	{
-		*ptr++ = b;
+		*ptr++ = (unsigned char)c;
 	}
 	return (s);
 }
@@ -54,23 +47,16 @@ char *_memset(char *s, char b, unsigned int n)
  * src does not need to be null-terminated if it contains n or more bytes
  * Return:dest
  */
-char *_strncat(char *dest, char *src, int n)
+char *_strncat(char *dest, const char *src, size_t n)
 {
-	int Q;
-	int R = 0;
+	char *ptr = dest + _strlen(dest);
 
-	for (Q = 0; dest[Q] != '\0'; Q++)
+	while (*src != '\0' && n-- > 0)
 	{
-	}
-	while (src[R] != '\0' && n > 0)
-	{
-		dest[Q] = src[R];
-		Q++;
-		R++;
-		n--;
+		*ptr++ = *src++;
 
 	}
-	dest[Q] = '\0';
+	*ptr = '\0';
 	return (dest);
 }
 /**
@@ -80,10 +66,10 @@ char *_strncat(char *dest, char *src, int n)
  * @n: size of bytes to be copied
  * Return:dest
  */
-char *_memcpy(char *dest, char *src, unsigned int n)
+char *_memcpy(void *dest, const void *src, size_t n)
 {
 	char *ptr_dest = dest;
-	char *ptr_src = src;
+	const char *ptr_src = src;
 
 	while (n-- > 0)
 	{
@@ -97,15 +83,12 @@ char *_memcpy(char *dest, char *src, unsigned int n)
   * @c: character to be located
   * Return:s if found or NULL if not found
   */
-char *_strchr(char *s, char c)
+char *_strchr(const char *s, int c)
 {
-	while (*s != '\0' && *s != c)
-	{
-		s++;
-	}
-	if (*s == c)
+	while (*s != '\0' && *s == c)
 	{
 		return ((char *)s);
+		s++;
 	}
 	return (NULL);
 }

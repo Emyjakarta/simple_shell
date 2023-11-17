@@ -109,7 +109,7 @@ char *str_concat(char *s1, char *s2)
  * @src: second variable of string
  * Return:the pointer to dest
  */
-char *_strcpy(char *dest, char *src)
+char *_strcpy(char *dest, const char *src)
 {
 	char *dest1 = dest;
 

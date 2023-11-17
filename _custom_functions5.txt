@@ -38,7 +38,7 @@ int _strncmp(const char *str1, const char *str2, size_t num)
 char *_strtok(char *str, const char *delim)
 {
 	static char *_nexttoken;
-	char *_token;
+	char *_tokenstart;
 
 	if (str != NULL)
 	{
@@ -46,6 +46,7 @@ char *_strtok(char *str, const char *delim)
 	}
 	else if (_nexttoken == NULL || *_nexttoken == '\0')
 		return (NULL);
+	_tokenstart = _nexttoken;
 	while (*_nexttoken != '\0' && _strchr((char *)delim, *_nexttoken) != NULL)
 	{
 		_nexttoken++;
@@ -55,7 +56,7 @@ char *_strtok(char *str, const char *delim)
 		_nexttoken = NULL;
 		return (NULL);
 	}
-	_token = _nexttoken;
+	_tokenstart = _nexttoken;
 	while (*_nexttoken != '\0' && _strchr((char *)delim, *_nexttoken) == NULL)
 	{
 		_nexttoken++;
@@ -63,11 +64,11 @@ char *_strtok(char *str, const char *delim)
 	if (*_nexttoken != '\0')
 	{
 		*_nexttoken = '\0';
-		(*_nexttoken)++;
+		_nexttoken++;
 	}
 	else
 		_nexttoken = NULL;
-	return (_token);
+	return (_tokenstart);
 }
 /**
  * _getline-reads a line from a file stream
