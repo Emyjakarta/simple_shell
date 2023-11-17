@@ -8,7 +8,7 @@ void _process_command(const char *_command)
 {
 	char *str[MAXIMUM_ARGUMENTS + 1] = {NULL}, *_token;
 	char *_copy_command = strdup(_command);
-	int Q = 0, R = 0, S;
+	int Q = 0, S;
 	char *_token1;
 
 	_token = strtok(_copy_command, " ");
@@ -22,11 +22,6 @@ void _process_command(const char *_command)
 			break;
 	}
 	str[Q] = NULL;
-	while (str[R] != NULL)
-	{
-		printf("%s\n", str[R]);
-		R++;
-	}
 	for (S = 0; S < Q; S++)
 		free(str[S]);
 	free(_copy_command);

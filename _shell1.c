@@ -17,7 +17,6 @@ void _handle_cd_command(const char *_command)
 	char *_new_dir = _get_cd_path(_command), *_home_dir;
 	char _current_dir[PATH_MAX], *_oldpwd = getenv("OLDPWD");
 
-	printf("Command input for cd: %s\n", _command);
 	if (_new_dir == NULL || _new_dir[0] == '\0')
 		_new_dir = getenv("HOME");
 	if (getcwd(_current_dir, PATH_MAX) == NULL)
@@ -84,10 +83,6 @@ void _process_command_loop(char **_command)
 				continue;
 			}
 			_handle_cd_command(*_command);
-		}
-		else if (_is_wildcard(*_command))
-		{
-			_handle_wildcard();
 		}
 		else
 		{

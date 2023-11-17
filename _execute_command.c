@@ -115,7 +115,6 @@ void _execute_command(const char *_command)
 		status = 0;
 		if (str[1] != NULL)
 			status = atoi(str[1]);
-		printf("Exiting shell with status %d\n", status);
 		_safe_free((void **)_command);
 		_exit(status);
 	}
