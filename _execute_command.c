@@ -102,7 +102,6 @@ void _execute_command_logic(const char *_command, char **str)
 void _execute_command(const char *_command)
 {
 	char *str[MAXIMUM_ARGUMENTS + 1] = {NULL};
-	int status;
 	char *_replaced = _replace_var((char *)_command);
 
 	if (_command[0] == '\0' || _command[0] == '\n')
@@ -110,14 +109,6 @@ void _execute_command(const char *_command)
 		return;
 	}
 	_tokenize_command(_replaced, str);
-	if (_is_exit(_command))
-	{
-		status = 0;
-		if (str[1] != NULL)
-			status = atoi(str[1]);
-		_safe_free((void **)_command);
-		_exit(status);
-	}
 	if (_command[0] == '/')
 	{
 		_execute_absolute_path(_command);
